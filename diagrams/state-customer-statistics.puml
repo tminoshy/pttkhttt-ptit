@@ -1,0 +1,44 @@
+@startuml
+!pragma layout smetana
+top to bottom direction
+hide empty description
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 18
+skinparam linetype ortho
+skinparam stateDiagramEdgeLabelStyle node
+skinparam nodesep 50
+skinparam ranksep 55
+skinparam ArrowColor black
+skinparam ArrowFontColor black
+skinparam ArrowFontName Arial
+skinparam ArrowFontSize 13
+skinparam ArrowThickness 1
+skinparam state {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+  FontName Arial
+  FontSize 14
+  StartColor black
+  EndColor black
+}
+
+state "Show main UI" as Main
+state "Show statistic\ntype UI" as SelectReport
+state "Show customer\nstatistics UI" as CustomerStats
+state "Show customer\nspending UI" as CustomerSpending
+state "Show order\ndetail UI" as OrderDetail
+
+[*] -down-> Main
+Main -down-> SelectReport : [select View statistics reports]
+SelectReport -down-> CustomerStats : [select Customer statistics by revenue]
+SelectReport -up-> Main : [click Back to main page]
+CustomerStats -up-> SelectReport : [click Back to statistics reports]
+CustomerStats -down-> CustomerSpending : [click 1 customer/No name]
+CustomerSpending -up-> CustomerStats : [click Back to statistic list]
+CustomerSpending -down-> OrderDetail : [click 1 order]
+OrderDetail -up-> CustomerSpending : [click Back to order list]
+@enduml
+

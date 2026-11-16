@@ -1,0 +1,43 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam ArrowColor black
+skinparam ArrowFontColor black
+skinparam actor {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+skinparam usecase {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+skinparam rectangle {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+hide stereotype
+left to right direction
+
+actor "Staff" as NhanVien
+actor "Management staff" as NVQL
+usecase "Login 4" as UC_DangNhap
+usecase "Management\nstaff login 4" as UC_NVQLDangNhap
+usecase "View statistics\nreports 4" as UC_BaoCao
+usecase "View customer\nstatistics by revenue 4" as UC_TKKH
+usecase "View customer spending\nand order list 4" as UC_ChiTieu
+usecase "View order\ndetails 4" as UC_DonHang
+NhanVien <|-- NVQL
+NhanVien -- UC_DangNhap
+UC_DangNhap <|-- UC_NVQLDangNhap
+NVQL -- UC_BaoCao
+UC_BaoCao ..> UC_NVQLDangNhap : <<include>>
+UC_BaoCao <.. UC_TKKH : <<extend>>
+UC_TKKH <.. UC_ChiTieu : <<extend>>
+UC_ChiTieu <.. UC_DonHang : <<extend>>
+@enduml

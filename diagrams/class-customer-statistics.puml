@@ -1,0 +1,155 @@
+@startuml
+!pragma layout smetana
+top to bottom direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam linetype ortho
+skinparam defaultFontName Arial
+skinparam defaultFontSize 18
+skinparam defaultFontColor black
+skinparam ArrowColor black
+skinparam classAttributeIconSize 0
+skinparam classBackgroundColor white
+skinparam classBorderColor black
+skinparam classFontColor black
+skinparam classFontStyle bold
+skinparam classAttributeFontColor black
+skinparam classAttributeFontStyle plain
+skinparam roundcorner 0
+skinparam nodesep 45
+skinparam ranksep 70
+hide circle
+hide empty methods
+' MODULE 2: XEM THỐNG KÊ KHÁCH HÀNG THEO DOANH THU
+' Dấu () là cách ghi ngắn trên biểu đồ phân tích; input/output ghi ở các chú thích mã.
+' Các phương thức chỉ đọc dữ liệu; không tạo thêm thực thể cho kết quả dẫn xuất.
+together {
+  class ManagerMainView4 {
+    -subManageDish
+    -subStatisticsReport
+  }
+  class StatisticsReportView4 {
+    -outsubStatisticTypes
+    -subBackToMain
+  }
+  class CustomerStatisticsView4 {
+    -inStartDate
+    -inEndDate
+    -subViewStatistics
+    -outsubStatisticList
+    -outMessage
+    -subBackToStatisticsReport
+  }
+  class CustomerSpendingView4 {
+    -outCustomerCode
+    -outDisplayName
+    -outPeriod
+    -outTotalSpending
+    -outsubOrderList
+    -subBackToStatisticList
+    -outMessage
+  }
+  class OrderDetailView4 {
+    -outOrderCode
+    -outCustomerInfo
+    -outPeriod
+    -outInvoiceCode
+    -outPaidAt
+    -outOrderLines
+    -outTotalAmount
+    -subBackToOrderList
+    -outMessage
+  }
+}
+class Customer4 {
+  -customerCode
+  -fullName
+  -phoneNumber
+  -profileStatus
+}
+class CustomerStatistic4 {
+  -periodStart
+  -periodEnd
+  -totalSpending
+  ' Input: periodStart, periodEnd; kiểm tra ngày bắt đầu không sau ngày kết thúc.
+  ' Output: kết quả hợp lệ hoặc thông tin điều kiện lỗi.
+  +validatePeriod()
+  ' Input: kỳ từ đầu ngày bắt đầu tới hết ngày kết thúc.
+  ' Output: kết quả thống kê khách, giảm dần theo tổng chi tiêu;
+  ' kèm tổng hợp tạm No name nếu có, để trống mã khách, không tạo Customer4 giả.
+  ' Chỉ tính Invoice4 có Payment4 thành công trong kỳ; mỗi Invoice4 tính một lần.
+  +getCustomerStatistics()
+}
+class Order4 {
+  -orderCode
+  -createdAt
+  -status
+ ' Input: khách có hồ sơ hoặc lựa chọn nhóm No name, cùng kỳ hiện tại.
+  ' Output: danh sách Order4 hợp lệ và thông tin chứng từ để hiển thị tổng chi tiêu.
+  ' Giữ đúng khách/nhóm, kỳ và cùng điều kiện hóa đơn/thanh toán thành công.
+  +getOrders()
+  ' Input: mã Order4, khách/nhóm và kỳ đang xem.
+  ' Output: một Order4 hợp lệ cùng Customer4/nhóm, Invoice4 và Payment4 liên quan.
+  ' Kiểm tra lại đúng ngữ cảnh; phần các OrderSubmissionProduct4 lấy riêng.
+  +getOrder()
+}
+class Invoice4 {
+  -invoiceCode
+  -issuedAt
+  -amountDue
+  -paymentStatus
+}
+class Payment4 {
+  -amount
+  -method
+  -paidAt
+  -result
+}
+class OrderSubmission4 {
+  -submittedAt
+}
+class OrderSubmissionProduct4 {
+  -quantity
+  -recordedUnitPrice
+  -note
+  -processingStatus
+  -processedAt
+  -rejectionReason
+  ' Input: Order4 hợp lệ cùng khách/nhóm và kỳ đang xem.
+  ' Output: các OrderSubmissionProduct4 của các OrderSubmission4 thuộc Order4 đó.
+  ' Chỉ lấy phần đã chấp nhận, chưa hủy; kiểm tra lại đơn còn hợp lệ theo ngữ cảnh.
+  ' Mã/tên mặt hàng lấy qua Product4; thành tiền = quantity * recordedUnitPrice.
+  ' Không dùng salePrice hiện tại thay recordedUnitPrice; không thêm thuộc tính dẫn xuất.
+  +getOrderSubmissionProducts()
+}
+abstract class Product4 {
+  -productCode
+  -name
+  -description
+  -salePrice
+  -image
+  -saleStatus
+  -createdAt
+  -updatedAt
+}
+' Liên kết giao diện: đường liền, không mũi tên.
+ManagerMainView4 -right- StatisticsReportView4
+StatisticsReportView4 -right- CustomerStatisticsView4
+CustomerStatisticsView4 -right- CustomerSpendingView4
+CustomerSpendingView4 -right- OrderDetailView4
+' Giao diện sử dụng đúng lớp sở hữu phương thức.
+CustomerStatisticsView4 -- CustomerStatistic4
+CustomerSpendingView4 -- Order4
+OrderDetailView4 -- Order4
+OrderDetailView4 -- OrderSubmissionProduct4
+' Giữ mô hình thực thể, hướng kế thừa và phía hình thoi đã chốt.
+Customer4 <|-- CustomerStatistic4
+Order4 o-- Customer4
+Order4 o-- Invoice4
+Invoice4 *-- Payment4
+Order4 *-- OrderSubmission4
+' Association class: một liên kết OrderSubmission4–Product4 và nét đứt gắn vào liên kết đó.
+OrderSubmission4 -- Product4
+(OrderSubmission4, Product4) .. OrderSubmissionProduct4
+@enduml
+

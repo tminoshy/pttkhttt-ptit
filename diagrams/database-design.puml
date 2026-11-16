@@ -1,0 +1,259 @@
+@startuml
+hide circle
+skinparam linetype ortho
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam defaultFontName Arial
+skinparam ArrowColor black
+skinparam class {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+}
+
+entity "tblStaff4" as tblStaff4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  fullName : varchar(255)
+  phoneNumber : varchar(255)
+  email : varchar(255)
+  workingStatus : varchar(50)
+  username : varchar(50) <<U>>
+  password : varchar(255)
+  accountStatus : varchar(50)
+  vaitro : varchar(50)
+  --
+}
+
+entity "tblCustomer4" as tblCustomer4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  customerCode : varchar(50) <<U>>
+  fullName : varchar(255)
+  phoneNumber : varchar(255)
+  profileStatus : varchar(50)
+  --
+}
+
+entity "tblMembershipCard4" as tblMembershipCard4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  cardCode : varchar(50) <<U>>
+  issuedAt : date
+  status : varchar(50)
+  --
+  tblCustomer4id : integer(10) <<FK>>
+}
+
+entity "tblSupplier4" as tblSupplier4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  name : varchar(255)
+  address : varchar(255)
+  phoneNumber : varchar(255)
+  email : varchar(255)
+  cooperationStatus : varchar(50)
+  --
+}
+
+entity "tblProduct4" as tblProduct4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  productCode : varchar(50) <<U>>
+  name : varchar(255)
+  description : varchar(255) <<N>>
+  salePrice : float(10)
+  image : varchar(255) <<N>>
+  saleStatus : varchar(50)
+  createdAt : datetime
+  updatedAt : datetime <<N>>
+  --
+}
+
+entity "tblDishCategory4" as tblDishCategory4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  categoryCode : varchar(50) <<U>>
+  name : varchar(255)
+  description : varchar(255) <<N>>
+  --
+}
+
+entity "tblDish4" as tblDish4 {
+  --
+  --
+  tblDishCategory4id : integer(10) <<FK>>
+  tblProduct4id : integer(10) <<PK>> <<FK>> <<U>>
+}
+
+entity "tblCombo4" as tblCombo4 {
+  --
+  startsAt : datetime
+  endsAt : datetime
+  --
+  tblProduct4id : integer(10) <<PK>> <<FK>> <<U>>
+}
+
+entity "tblComboDish4" as tblComboDish4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  quantity : integer(10)
+  --
+  tblCombo4id : integer(10) <<FK>>
+  tblDish4id : integer(10) <<FK>>
+}
+
+entity "tblIngredient4" as tblIngredient4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  name : varchar(255)
+  unit : varchar(50)
+  currentStock : float(10)
+  --
+}
+
+entity "tblGoodsReceipt4" as tblGoodsReceipt4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  receivedDate : date
+  createdAt : datetime
+  --
+  tblSupplier4id : integer(10) <<FK>>
+  tblStaff4id : integer(10) <<FK>>
+}
+
+entity "tblGoodsReceiptIngredient4" as tblGoodsReceiptIngredient4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  quantity : float(10)
+  unitCost : float(10)
+  --
+  tblGoodsReceipt4id : integer(10) <<FK>>
+  tblIngredient4id : integer(10) <<FK>>
+}
+
+entity "tblDiningTable4" as tblDiningTable4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  tableNumber : integer(10)
+  area : varchar(255)
+  capacity : integer(10)
+  serviceStatus : varchar(50)
+  --
+}
+
+entity "tblReservation4" as tblReservation4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  submittedAt : datetime
+  expectedArrival : datetime
+  expectedEnd : datetime
+  guestCount : integer(10)
+  note : varchar(255) <<N>>
+  status : varchar(50)
+  processedAt : datetime <<N>>
+  rejectionReason : varchar(255) <<N>>
+  --
+  tblCustomer4id : integer(10) <<FK>>
+  tblDiningTable4id : integer(10) <<FK>>
+  tblStaff4id : integer(10) <<FK>>
+}
+
+entity "tblServiceSession4" as tblServiceSession4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  actualGuestCount : integer(10)
+  startedAt : datetime
+  expectedEnd : datetime
+  endedAt : datetime <<N>>
+  status : varchar(50)
+  --
+  tblDiningTable4id : integer(10) <<FK>>
+  tblReservation4id : integer(10) <<FK>> <<U>> <<N>>
+  tblOrder4id : integer(10) <<FK>> <<U>> <<N>>
+}
+
+entity "tblOrder4" as tblOrder4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  orderCode : varchar(50) <<U>>
+  createdAt : datetime
+  status : varchar(50)
+  --
+  tblCustomer4id : integer(10) <<FK>> <<N>>
+}
+
+entity "tblOrderSubmission4" as tblOrderSubmission4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  submittedAt : datetime
+  --
+  tblOrder4id : integer(10) <<FK>>
+}
+
+entity "tblOrderSubmissionProduct4" as tblOrderSubmissionProduct4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  quantity : integer(10)
+  recordedUnitPrice : float(10)
+  note : varchar(255) <<N>>
+  processingStatus : varchar(50)
+  processedAt : datetime <<N>>
+  rejectionReason : varchar(255) <<N>>
+  --
+  tblOrderSubmission4id : integer(10) <<FK>>
+  tblProduct4id : integer(10) <<FK>>
+  tblStaff4id : integer(10) <<FK>>
+}
+
+entity "tblInvoice4" as tblInvoice4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  invoiceCode : varchar(50) <<U>>
+  issuedAt : datetime
+  amountDue : float(10)
+  paymentStatus : varchar(50)
+  --
+  tblOrder4id : integer(10) <<FK>> <<U>>
+  tblStaff4id : integer(10) <<FK>>
+}
+
+entity "tblPayment4" as tblPayment4 {
+  id : integer(10) <<PK>> <<U>>
+  --
+  amount : float(10)
+  method : varchar(50)
+  paidAt : datetime
+  result : varchar(50)
+  --
+  tblInvoice4id : integer(10) <<FK>>
+  tblStaff4id : integer(10) <<FK>>
+}
+
+tblCustomer4 ||..o{ tblMembershipCard4
+tblCustomer4 ||..o{ tblReservation4
+tblDiningTable4 ||..o{ tblReservation4
+tblStaff4 ||..o{ tblReservation4
+tblDiningTable4 ||..o{ tblServiceSession4
+tblReservation4 |o..o| tblServiceSession4
+tblOrder4 |o..o| tblServiceSession4
+tblOrder4 ||..o| tblInvoice4
+tblStaff4 ||..o{ tblInvoice4
+tblInvoice4 ||..o{ tblPayment4
+tblStaff4 ||..o{ tblPayment4
+tblCustomer4 |o..o{ tblOrder4
+tblOrder4 ||..o{ tblOrderSubmission4
+tblOrderSubmission4 ||..o{ tblOrderSubmissionProduct4
+tblProduct4 ||..o{ tblOrderSubmissionProduct4
+tblStaff4 ||..o{ tblOrderSubmissionProduct4
+tblSupplier4 ||..o{ tblGoodsReceipt4
+tblStaff4 ||..o{ tblGoodsReceipt4
+tblGoodsReceipt4 ||..o{ tblGoodsReceiptIngredient4
+tblIngredient4 ||..o{ tblGoodsReceiptIngredient4
+tblDishCategory4 ||..o{ tblDish4
+tblCombo4 ||..o{ tblComboDish4
+tblDish4 ||..o{ tblComboDish4
+tblProduct4 ||--|| tblDish4
+tblProduct4 ||--|| tblCombo4
+@enduml

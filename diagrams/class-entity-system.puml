@@ -1,0 +1,194 @@
+@startuml
+!pragma layout elk
+top to bottom direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 70
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam classAttributeIconSize 0
+skinparam ArrowColor black
+skinparam class {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    AttributeFontColor black
+}
+hide circle
+hide methods
+abstract class Staff4 {
+    -fullName
+    -phoneNumber
+    -email
+    -workingStatus
+}
+class ManagementStaff4 {
+}
+class WarehouseStaff4 {
+}
+class SalesStaff4 {
+}
+class Account4 {
+    -username
+    -password
+    -accountStatus
+}
+class Customer4 {
+    -customerCode
+    -fullName
+    -phoneNumber
+    -profileStatus
+}
+class MembershipCard4 {
+    -cardCode
+    -issuedAt
+    -status
+}
+class Supplier4 {
+    -name
+    -address
+    -phoneNumber
+    -email
+    -cooperationStatus
+}
+abstract class Product4 {
+    -productCode
+    -name
+    -description
+    -salePrice
+    -image
+    -saleStatus
+    -createdAt
+    -updatedAt
+}
+class Dish4 {
+}
+class DishCategory4 {
+    -categoryCode
+    -name
+    -description
+}
+class Combo4 {
+    -startsAt
+    -endsAt
+}
+class ComboDish4 {
+    -quantity
+}
+class Ingredient4 {
+    -name
+    -unit
+    -currentStock
+}
+class GoodsReceipt4 {
+    -receivedDate
+    -createdAt
+}
+class GoodsReceiptIngredient4 {
+    -quantity
+    -unitCost
+}
+class DiningTable4 {
+    -tableNumber
+    -area
+    -capacity
+    -serviceStatus
+}
+class Reservation4 {
+    -submittedAt
+    -expectedArrival
+    -expectedEnd
+    -guestCount
+    -note
+    -status
+    -processedAt
+    -rejectionReason
+}
+class ServiceSession4 {
+    -actualGuestCount
+    -startedAt
+    -expectedEnd
+    -endedAt
+    -status
+}
+class Order4 {
+    -orderCode
+    -createdAt
+    -status
+}
+class OrderSubmission4 {
+    -submittedAt
+}
+class OrderSubmissionProduct4 {
+    -quantity
+    -recordedUnitPrice
+    -note
+    -processingStatus
+    -processedAt
+    -rejectionReason
+}
+class Invoice4 {
+    -invoiceCode
+    -issuedAt
+    -amountDue
+    -paymentStatus
+}
+class Payment4 {
+    -amount
+    -method
+    -paidAt
+    -result
+}
+class CustomerStatistic4 {
+    -periodStart
+    -periodEnd
+  -totalSpending
+}
+class ProductStatistic4 {
+    -periodStart
+    -periodEnd
+}
+class IngredientStatistic4 {
+}
+class SupplierStatistic4 {
+    -periodStart
+    -periodEnd
+}
+Staff4 <|-- ManagementStaff4
+Staff4 <|-- WarehouseStaff4
+Staff4 <|-- SalesStaff4
+Product4 <|-- Dish4
+Product4 <|-- Combo4
+Customer4 <|-- CustomerStatistic4
+Product4 <|-- ProductStatistic4
+Ingredient4 <|-- IngredientStatistic4
+Supplier4 <|-- SupplierStatistic4
+Staff4 *-- Account4
+Customer4 *-- MembershipCard4
+Reservation4 o-- Customer4
+Reservation4 o-- DiningTable4
+ServiceSession4 o-- DiningTable4
+ServiceSession4 o-- Reservation4
+ServiceSession4 o-- Order4
+Order4 o-- Customer4
+Order4 *-- OrderSubmission4
+Order4 o-- Invoice4
+Invoice4 *-- Payment4
+DishCategory4 o-- Dish4
+GoodsReceipt4 o-- Supplier4
+Combo4 -- Dish4
+(Combo4, Dish4) .. ComboDish4
+GoodsReceipt4 -- Ingredient4
+(GoodsReceipt4, Ingredient4) .. GoodsReceiptIngredient4
+OrderSubmission4 -- Product4
+(OrderSubmission4, Product4) .. OrderSubmissionProduct4
+Reservation4 o-- SalesStaff4 : handled by
+OrderSubmissionProduct4 o-- SalesStaff4 : handled by
+Invoice4 o-- SalesStaff4 : issued by
+Payment4 o-- SalesStaff4 : received by
+GoodsReceipt4 o-- WarehouseStaff4
+@enduml
+

@@ -1,0 +1,174 @@
+@startuml
+' Alias: NV = nhân viên quản lý; Chinh/List/Add/Save = các trang JSP theo thứ tự xuất hiện.
+' Alias: DDAO = DishDAO4; CDAO = DishCategoryDAO4; Dish4/Category = các lớp thực thể.
+skinparam style strictuml
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam defaultFontColor black
+skinparam ArrowColor black
+skinparam sequence {
+    ParticipantBackgroundColor white
+    ParticipantBorderColor black
+    ActorBackgroundColor white
+    ActorBorderColor black
+    LifeLineBorderColor black
+    LifeLineBackgroundColor white
+    ActivationBackgroundColor white
+    ActivationBorderColor black
+}
+<style>
+root {
+    BackgroundColor white
+    LineColor black
+}
+</style>
+hide footbox
+actor "Management staff" as NV
+boundary "managerMainView4.jsp" as Chinh
+boundary "dishManagementView4.jsp" as List
+boundary "addDishView4.jsp" as Add
+boundary "doSaveDish4.jsp" as Save
+control "DishDAO4" as DDAO
+control "DishCategoryDAO4" as CDAO
+entity "Dish4" as Dish4
+entity "DishCategory4" as Category
+
+NV -> Chinh : 1: select Manage dish information
+activate Chinh
+Chinh -> List : 2: call
+activate List
+deactivate Chinh
+List -> DDAO : 3: call
+activate DDAO
+DDAO -> DDAO : 4: getDishes()
+activate DDAO
+DDAO -> Dish4 : 5: call
+activate Dish4
+Dish4 -> Dish4 : 6: Dish4()
+activate Dish4
+deactivate Dish4
+Dish4 --> DDAO : 7: return
+deactivate Dish4
+deactivate DDAO
+DDAO --> List : 8: return
+deactivate DDAO
+List -> CDAO : 9: call
+activate CDAO
+CDAO -> CDAO : 10: getDishCategories()
+activate CDAO
+CDAO -> Category : 11: call
+activate Category
+Category -> Category : 12: DishCategory4()
+activate Category
+deactivate Category
+Category --> CDAO : 13: return
+deactivate Category
+deactivate CDAO
+CDAO --> List : 14: return
+deactivate CDAO
+List --> NV : 15: display
+deactivate List
+NV -> List : 16: click Add dish
+activate List
+List -> Add : 17: call
+activate Add
+deactivate List
+Add -> CDAO : 18: call
+activate CDAO
+CDAO -> CDAO : 19: getDishCategories()
+activate CDAO
+CDAO -> Category : 20: call
+activate Category
+Category -> Category : 21: DishCategory4()
+activate Category
+deactivate Category
+Category --> CDAO : 22: return
+deactivate Category
+deactivate CDAO
+CDAO --> Add : 23: return
+deactivate CDAO
+Add --> NV : 24: display
+deactivate Add
+NV -> Add : 25: enter data + click Save
+activate Add
+Add -> Save : 26: call
+activate Save
+deactivate Add
+Save -> Dish4 : 27: call
+activate Dish4
+Dish4 -> Dish4 : 28: setter()
+activate Dish4
+deactivate Dish4
+Dish4 --> Save : 29: return
+deactivate Dish4
+Save -> DDAO : 30: call
+activate DDAO
+DDAO -> DDAO : 31: validateDish()
+activate DDAO
+deactivate DDAO
+DDAO --> Save : 32: return
+deactivate DDAO
+Save -> DDAO : 33: call
+activate DDAO
+DDAO -> DDAO : 34: saveDish()
+activate DDAO
+deactivate DDAO
+DDAO --> Save : 35: return
+deactivate DDAO
+Save -> Add : 36: call
+activate Add
+deactivate Save
+Add -> CDAO : 37: call
+activate CDAO
+CDAO -> CDAO : 38: getDishCategories()
+activate CDAO
+CDAO -> Category : 39: call
+activate Category
+Category -> Category : 40: DishCategory4()
+activate Category
+deactivate Category
+Category --> CDAO : 41: return
+deactivate Category
+deactivate CDAO
+CDAO --> Add : 42: return
+deactivate CDAO
+Add -> NV : 43: show success message
+deactivate Add
+NV -> Add : 44: click OK
+activate Add
+Add -> List : 45: call
+activate List
+deactivate Add
+List -> DDAO : 46: call
+activate DDAO
+DDAO -> DDAO : 47: getDishes()
+activate DDAO
+DDAO -> Dish4 : 48: call
+activate Dish4
+Dish4 -> Dish4 : 49: Dish4()
+activate Dish4
+deactivate Dish4
+Dish4 --> DDAO : 50: return
+deactivate Dish4
+deactivate DDAO
+DDAO --> List : 51: return
+deactivate DDAO
+List -> CDAO : 52: call
+activate CDAO
+CDAO -> CDAO : 53: getDishCategories()
+activate CDAO
+CDAO -> Category : 54: call
+activate Category
+Category -> Category : 55: DishCategory4()
+activate Category
+deactivate Category
+Category --> CDAO : 56: return
+deactivate Category
+deactivate CDAO
+CDAO --> List : 57: return
+deactivate CDAO
+List --> NV : 58: display
+deactivate List
+@enduml

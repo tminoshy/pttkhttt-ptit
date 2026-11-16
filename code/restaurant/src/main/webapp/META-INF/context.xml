@@ -1,0 +1,2 @@
+<!-- [NGOÀI THIẾT KẾ] Cho JSP đọc multipart theo cấu hình Tomcat 10.1. -->
+<Context allowCasualMultipartParsing="true"/>

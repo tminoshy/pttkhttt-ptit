@@ -1,0 +1,65 @@
+@startuml
+!pragma layout smetana
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam linetype polyline
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam ArrowColor black
+skinparam ArrowFontColor black
+skinparam ArrowFontName Arial
+skinparam ArrowFontSize 12
+skinparam ArrowThickness 1
+skinparam nodesep 70
+skinparam ranksep 80
+skinparam actor {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+skinparam boundary {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+skinparam entity {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+
+actor "Management staff" as NVQL
+boundary ManagerMainView4
+boundary StatisticsReportView4
+boundary CustomerStatisticsView4
+boundary CustomerSpendingView4
+boundary OrderDetailView4
+entity CustomerStatistic4
+entity Order4
+entity OrderSubmissionProduct4
+
+' Row 2: boundary objects in navigation order.
+ManagerMainView4 -right- StatisticsReportView4 : "2: call →"
+StatisticsReportView4 -right- CustomerStatisticsView4 : "5: call →"
+CustomerStatisticsView4 -right- CustomerSpendingView4 : "16: call →\n35: call ←"
+CustomerSpendingView4 -right- OrderDetailView4 : "22: call →\n31: call ←"
+
+' Row 3: entity objects below their callers.
+CustomerStatisticsView4 -down- CustomerStatistic4 : "8: call ↓\n10: return ↑\n11: call ↓\n13: return ↑"
+CustomerSpendingView4 -down- Order4 : "17: call ↓\n19: return ↑"
+OrderDetailView4 -down- Order4 : "23: call ↓\n25: return ↑"
+OrderDetailView4 -down- OrderSubmissionProduct4 : "26: call ↓\n28: return ↑"
+
+' Row 1: actor fan-out.
+NVQL -down- ManagerMainView4 : "1: select View statistics reports ↓"
+NVQL -down- StatisticsReportView4 : "3: display ↑\n4: select Customer statistics by revenue ↓"
+NVQL -down- CustomerStatisticsView4 : "6: display ↑\n7: choose period + click View statistics ↓\n14: display ↑\n15: select customer/group ↓\n36: display ↑\n37: select another customer/group ↓\n38: change period + click View statistics ↓"
+NVQL -down- CustomerSpendingView4 : "20: display ↑\n21: select order ↓\n32: display ↑\n33: select another order ↓\n34: click Back to statistic list ↓"
+NVQL -down- OrderDetailView4 : "29: display ↑\n30: click Back to order list ↓"
+
+' Entity self-messages.
+CustomerStatistic4 -- CustomerStatistic4 : "9: validatePeriod()\n12: getCustomerStatistics()"
+Order4 -- Order4 : "18: getOrders()\n24: getOrder()"
+OrderSubmissionProduct4 -- OrderSubmissionProduct4 : "27: getOrderSubmissionProducts()"
+@enduml

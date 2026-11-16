@@ -1,0 +1,239 @@
+@startuml
+!pragma layout elk
+top to bottom direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 70
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam classAttributeIconSize 0
+skinparam ArrowColor black
+skinparam class {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    AttributeFontColor black
+}
+hide circle
+hide methods
+
+abstract class Staff4 {
+    -id : int
+    -fullName : String
+    -phoneNumber : String
+    -email : String
+    -workingStatus : String
+    -account : Account4
+}
+class ManagementStaff4 {
+}
+class WarehouseStaff4 {
+}
+class SalesStaff4 {
+}
+class Account4 {
+    -id : int
+    -username : String
+    -password : String
+    -accountStatus : String
+}
+class Customer4 {
+    -id : int
+    -customerCode : String
+    -fullName : String
+    -phoneNumber : String
+    -profileStatus : String
+    -membershipCards : MembershipCard4[]
+}
+class MembershipCard4 {
+    -id : int
+    -cardCode : String
+    -issuedAt : Date
+    -status : String
+}
+class Supplier4 {
+    -id : int
+    -name : String
+    -address : String
+    -phoneNumber : String
+    -email : String
+    -cooperationStatus : String
+}
+abstract class Product4 {
+    -id : int
+    -productCode : String
+    -name : String
+    -description : String
+    -salePrice : float
+    -image : String
+    -saleStatus : String
+    -createdAt : Date
+    -updatedAt : Date
+}
+class Dish4 {
+}
+class DishCategory4 {
+    -id : int
+    -categoryCode : String
+    -name : String
+    -description : String
+    -dishes : Dish4[]
+}
+class Combo4 {
+    -startsAt : Date
+    -endsAt : Date
+    -comboDishes : ComboDish4[]
+}
+class ComboDish4 {
+    -id : int
+    -quantity : int
+    -dish : Dish4
+}
+class Ingredient4 {
+    -id : int
+    -name : String
+    -unit : String
+    -currentStock : float
+}
+class GoodsReceipt4 {
+    -id : int
+    -receivedDate : Date
+    -createdAt : Date
+    -goodsReceiptIngredients : GoodsReceiptIngredient4[]
+    -supplier : Supplier4
+    -warehouseStaff : WarehouseStaff4
+}
+class GoodsReceiptIngredient4 {
+    -id : int
+    -quantity : float
+    -unitCost : float
+    -ingredient : Ingredient4
+}
+class DiningTable4 {
+    -id : int
+    -tableNumber : int
+    -area : String
+    -capacity : int
+    -serviceStatus : String
+}
+class Reservation4 {
+    -id : int
+    -submittedAt : Date
+    -expectedArrival : Date
+    -expectedEnd : Date
+    -guestCount : int
+    -note : String
+    -status : String
+    -processedAt : Date
+    -rejectionReason : String
+    -customer : Customer4
+    -diningTable : DiningTable4
+    -salesStaff : SalesStaff4
+}
+class ServiceSession4 {
+    -id : int
+    -actualGuestCount : int
+    -startedAt : Date
+    -expectedEnd : Date
+    -endedAt : Date
+    -status : String
+    -diningTable : DiningTable4
+    -reservation : Reservation4
+    -order : Order4
+}
+class Order4 {
+    -id : int
+    -orderCode : String
+    -createdAt : Date
+    -status : String
+    -orderSubmissions : OrderSubmission4[]
+    -customer : Customer4
+    -invoice : Invoice4
+}
+class OrderSubmission4 {
+    -id : int
+    -submittedAt : Date
+    -orderSubmissionProducts : OrderSubmissionProduct4[]
+}
+class OrderSubmissionProduct4 {
+    -id : int
+    -quantity : int
+    -recordedUnitPrice : float
+    -note : String
+    -processingStatus : String
+    -processedAt : Date
+    -rejectionReason : String
+    -product : Product4
+    -salesStaff : SalesStaff4
+}
+class Invoice4 {
+    -id : int
+    -invoiceCode : String
+    -issuedAt : Date
+    -amountDue : float
+    -paymentStatus : String
+    -salesStaff : SalesStaff4
+    -payments : Payment4[]
+}
+class Payment4 {
+    -id : int
+    -amount : float
+    -method : String
+    -paidAt : Date
+    -result : String
+    -salesStaff : SalesStaff4
+}
+class CustomerStatistic4 {
+    -periodStart : Date
+    -periodEnd : Date
+    -totalSpending : float
+}
+class ProductStatistic4 {
+    -periodStart : Date
+    -periodEnd : Date
+}
+class IngredientStatistic4 {
+}
+class SupplierStatistic4 {
+    -periodStart : Date
+    -periodEnd : Date
+}
+
+Staff4 <|-- ManagementStaff4
+Staff4 <|-- WarehouseStaff4
+Staff4 <|-- SalesStaff4
+Product4 <|-- Dish4
+Product4 <|-- Combo4
+Customer4 <|-- CustomerStatistic4
+Product4 <|-- ProductStatistic4
+Ingredient4 <|-- IngredientStatistic4
+Supplier4 <|-- SupplierStatistic4
+
+Staff4 *-- Account4
+Customer4 *-- MembershipCard4
+Reservation4 o-- Customer4
+Reservation4 o-- DiningTable4
+Reservation4 o-- SalesStaff4
+ServiceSession4 o-- DiningTable4
+ServiceSession4 o-- Reservation4
+ServiceSession4 o-- Order4
+Order4 o-- Customer4
+Order4 *-- OrderSubmission4
+Order4 o-- Invoice4
+Invoice4 o-- SalesStaff4
+Invoice4 *-- Payment4
+Payment4 o-- SalesStaff4
+DishCategory4 o-- Dish4
+GoodsReceipt4 o-- Supplier4
+GoodsReceipt4 o-- WarehouseStaff4
+Combo4 *-- ComboDish4
+ComboDish4 o-- Dish4
+GoodsReceipt4 *-- GoodsReceiptIngredient4
+GoodsReceiptIngredient4 o-- Ingredient4
+OrderSubmission4 *-- OrderSubmissionProduct4
+OrderSubmissionProduct4 o-- Product4
+OrderSubmissionProduct4 o-- SalesStaff4
+@enduml

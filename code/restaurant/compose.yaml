@@ -1,0 +1,53 @@
+# [NGOÀI THIẾT KẾ] Chạy thử hai module và JUnit bằng Docker; không thuộc biểu đồ triển khai.
+name: restaurant
+
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: restaurant_root
+      MYSQL_DATABASE: restaurant
+      MYSQL_USER: restaurant
+      MYSQL_PASSWORD: restaurant_local
+      TZ: Asia/Ho_Chi_Minh
+    command: ["--character-set-server=utf8mb4", "--default-time-zone=+07:00"]
+    ports:
+      - "${DB_PORT:-3307}:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./docker/mysql-init/00-test-db.sql:/docker-entrypoint-initdb.d/00-test-db.sql:ro
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/20-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  app:
+    build:
+      context: .
+      target: runtime
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    volumes:
+      - dish-images:/usr/local/tomcat/webapps/restaurant/images/dishes
+    depends_on:
+      db:
+        condition: service_healthy
+
+  test:
+    build:
+      context: .
+      target: test
+    profiles: ["test"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:
+  dish-images:

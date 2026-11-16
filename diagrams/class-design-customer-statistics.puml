@@ -1,0 +1,245 @@
+@startuml
+
+top to bottom direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam linetype ortho
+skinparam nodesep 65
+skinparam ranksep 90
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam defaultFontColor black
+skinparam classAttributeIconSize 0
+skinparam ArrowColor black
+skinparam class {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    AttributeFontColor black
+}
+hide circle
+hide empty methods
+
+'tầng giao diện
+together {
+class "managerMainView4.jsp" as gdChinhQuanLy {
+    -subManageDish : link
+    -subStatisticsReport : link
+    -managementStaff : ManagementStaff4
+}
+class "statisticsReportView4.jsp" as gdBaoCaoThongKe {
+    -outsubStatisticTypes : Table
+    -subBackToMain : submit
+    -managementStaff : ManagementStaff4
+}
+class "customerStatisticsView4.jsp" as gdThongKeKhachHang {
+    -inStartDate : date
+    -inEndDate : date
+    -subViewStatistics : submit
+    -outsubStatisticList : Table
+    -outMessage : Label
+    -subBackToStatisticsReport : submit
+    -customerStatistics : CustomerStatistic4[]
+    -managementStaff : ManagementStaff4
+}
+class "customerSpendingView4.jsp" as gdChiTietChiTieuKhachHang {
+    -outCustomerCode : Label
+    -outDisplayName : Label
+    -outPeriod : Label
+    -outTotalSpending : Label
+    -outsubOrderList : Table
+    -subBackToStatisticList : submit
+    -outMessage : Label
+    -customerStatistic : CustomerStatistic4
+    -orders : Order4[]
+    -managementStaff : ManagementStaff4
+}
+class "orderDetailView4.jsp" as gdChiTietDonHang {
+    -outOrderCode : Label
+    -outCustomerInfo : Label
+    -outPeriod : Label
+    -outInvoiceCode : Label
+    -outPaidAt : Label
+    -outOrderLines : Table
+    -outTotalAmount : Label
+    -subBackToOrderList : submit
+    -outMessage : Label
+    -customerStatistic : CustomerStatistic4
+    -order : Order4
+    -orderSubmissionProducts : OrderSubmissionProduct4[]
+    -managementStaff : ManagementStaff4
+}
+}
+
+' tầng thao tác dữ liệu
+together {
+abstract class DAO4 {
+    {static} #con : Connection
+    +DAO4()
+}
+class CustomerStatisticDAO4 {
+    +CustomerStatisticDAO4()
+    +validatePeriod(periodStart : Date, periodEnd : Date) : boolean
+    +getCustomerStatistics(periodStart : Date, periodEnd : Date) : CustomerStatistic4[]
+}
+class OrderDAO4 {
+    +OrderDAO4()
+    +getOrders(idCustomer : int, periodStart : Date, periodEnd : Date) : Order4[]
+    +getOrder(idOrder : int, idCustomer : int, periodStart : Date, periodEnd : Date) : Order4
+}
+class OrderSubmissionProductDAO4 {
+    +OrderSubmissionProductDAO4()
+    +getOrderSubmissionProducts(idOrder : int, idCustomer : int, periodStart : Date, periodEnd : Date) : OrderSubmissionProduct4[]
+}
+}
+
+' tầng thực thể: giữ nguyên hộp từ class-entity-design.puml
+class Customer4 {
+    -id : int
+    -customerCode : String
+    -fullName : String
+    -phoneNumber : String
+    -profileStatus : String
+    -membershipCards : MembershipCard4[]
+}
+class CustomerStatistic4 {
+    -periodStart : Date
+    -periodEnd : Date
+    -totalSpending : float
+}
+class Order4 {
+    -id : int
+    -orderCode : String
+    -createdAt : Date
+    -status : String
+    -orderSubmissions : OrderSubmission4[]
+    -customer : Customer4
+    -invoice : Invoice4
+}
+class Invoice4 {
+    -id : int
+    -invoiceCode : String
+    -issuedAt : Date
+    -amountDue : float
+    -paymentStatus : String
+    -salesStaff : SalesStaff4
+    -payments : Payment4[]
+}
+class Payment4 {
+    -id : int
+    -amount : float
+    -method : String
+    -paidAt : Date
+    -result : String
+    -salesStaff : SalesStaff4
+}
+class OrderSubmission4 {
+    -id : int
+    -submittedAt : Date
+    -orderSubmissionProducts : OrderSubmissionProduct4[]
+}
+class OrderSubmissionProduct4 {
+    -id : int
+    -quantity : int
+    -recordedUnitPrice : float
+    -note : String
+    -processingStatus : String
+    -processedAt : Date
+    -rejectionReason : String
+    -product : Product4
+    -salesStaff : SalesStaff4
+}
+abstract class Product4 {
+    -id : int
+    -productCode : String
+    -name : String
+    -description : String
+    -salePrice : float
+    -image : String
+    -saleStatus : String
+    -createdAt : Date
+    -updatedAt : Date
+}
+class Dish4 {
+}
+class Combo4 {
+    -startsAt : Date
+    -endsAt : Date
+    -comboDishes : ComboDish4[]
+}
+class ComboDish4 {
+    -id : int
+    -quantity : int
+    -dish : Dish4
+}
+class MembershipCard4 {
+    -id : int
+    -cardCode : String
+    -issuedAt : Date
+    -status : String
+}
+class SalesStaff4 {
+}
+class ManagementStaff4 {
+}
+abstract class Staff4 {
+    -id : int
+    -fullName : String
+    -phoneNumber : String
+    -email : String
+    -workingStatus : String
+    -account : Account4
+}
+class Account4 {
+    -id : int
+    -username : String
+    -password : String
+    -accountStatus : String
+}
+
+gdChinhQuanLy -right- gdBaoCaoThongKe
+gdBaoCaoThongKe -right- gdThongKeKhachHang
+gdThongKeKhachHang -right- gdChiTietChiTieuKhachHang
+gdChiTietChiTieuKhachHang -right- gdChiTietDonHang
+gdThongKeKhachHang -- gdThongKeKhachHang
+gdThongKeKhachHang -down- CustomerStatisticDAO4
+gdChiTietChiTieuKhachHang -down- OrderDAO4
+gdChiTietDonHang -down- OrderDAO4
+gdChiTietDonHang -down- OrderSubmissionProductDAO4
+DAO4 <|-- CustomerStatisticDAO4
+CustomerStatisticDAO4 -down- CustomerStatistic4
+DAO4 <|-- OrderDAO4
+OrderDAO4 -down- Order4
+DAO4 <|-- OrderSubmissionProductDAO4
+OrderSubmissionProductDAO4 -down- OrderSubmissionProduct4
+Staff4 <|-- ManagementStaff4
+Staff4 <|-- SalesStaff4
+Customer4 <|-- CustomerStatistic4
+Staff4 *-- Account4
+Customer4 *-- MembershipCard4
+Order4 o-- Customer4
+Order4 *-- OrderSubmission4
+Order4 o-- Invoice4
+Invoice4 o-- SalesStaff4
+Invoice4 *-- Payment4
+Payment4 o-- SalesStaff4
+OrderSubmission4 *-- OrderSubmissionProduct4
+Product4 <|-- Dish4
+Product4 <|-- Combo4
+Combo4 *-- ComboDish4
+ComboDish4 o-- Dish4
+OrderSubmissionProduct4 o-- Product4
+OrderSubmissionProduct4 o-- SalesStaff4
+gdChinhQuanLy -[hidden]down- DAO4
+gdBaoCaoThongKe -[hidden]down- DAO4
+gdThongKeKhachHang -[hidden]down- DAO4
+gdChiTietChiTieuKhachHang -[hidden]down- DAO4
+gdChiTietDonHang -[hidden]down- DAO4
+CustomerStatisticDAO4 -[hidden]down- Staff4
+OrderDAO4 -[hidden]down- Staff4
+OrderSubmissionProductDAO4 -[hidden]down- Staff4
+CustomerStatisticDAO4 -[hidden]down- Customer4
+OrderDAO4 -[hidden]down- Customer4
+OrderSubmissionProductDAO4 -[hidden]down- Customer4
+@enduml

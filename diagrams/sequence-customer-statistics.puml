@@ -1,0 +1,154 @@
+@startuml
+' Alias trang: Chinh = chính; BC = báo cáo; TK = thống kê; CT = chi tiêu; DH = đơn hàng.
+' Alias DAO4: CDAO = CustomerStatisticDAO4; ODAO = OrderDAO4; LDAO = OrderSubmissionProductDAO4.
+' Alias thực thể: CS = CustomerStatistic4; O = Order4; Line = OrderSubmissionProduct4.
+skinparam style strictuml
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam defaultFontColor black
+skinparam ArrowColor black
+skinparam sequence {
+    ParticipantBackgroundColor white
+    ParticipantBorderColor black
+    ActorBackgroundColor white
+    ActorBorderColor black
+    LifeLineBorderColor black
+    LifeLineBackgroundColor white
+    ActivationBackgroundColor white
+    ActivationBorderColor black
+}
+<style>
+root {
+    BackgroundColor white
+    LineColor black
+}
+</style>
+hide footbox
+
+actor "Management staff" as NV
+boundary "managerMainView4.jsp" as Chinh
+boundary "statisticsReportView4.jsp" as BC
+boundary "customerStatisticsView4.jsp" as TK
+boundary "customerSpendingView4.jsp" as CT
+boundary "orderDetailView4.jsp" as DH
+control "CustomerStatisticDAO4" as CDAO
+control "OrderDAO4" as ODAO
+control "OrderSubmissionProductDAO4" as LDAO
+entity "CustomerStatistic4" as CS
+entity "Order4" as O
+entity "OrderSubmissionProduct4" as Line
+NV -> Chinh : 1: select View statistics reports
+activate Chinh
+Chinh -> BC : 2: call
+activate BC
+deactivate Chinh
+BC --> NV : 3: display
+deactivate BC
+NV -> BC : 4: select Customer statistics by revenue
+activate BC
+BC -> TK : 5: call
+activate TK
+deactivate BC
+TK --> NV : 6: display
+deactivate TK
+NV -> TK : 7: choose dates + click View statistics
+activate TK
+TK -> TK : 8: call
+activate TK
+TK -> CDAO : 9: call
+activate CDAO
+CDAO -> CDAO : 10: validatePeriod()
+activate CDAO
+deactivate CDAO
+CDAO --> TK : 11: return
+deactivate CDAO
+TK -> CDAO : 12: call
+activate CDAO
+CDAO -> CDAO : 13: getCustomerStatistics()
+activate CDAO
+CDAO -> CS : 14: call
+activate CS
+CS -> CS : 15: CustomerStatistic4()
+activate CS
+deactivate CS
+CS --> CDAO : 16: return
+deactivate CS
+deactivate CDAO
+CDAO --> TK : 17: return
+deactivate CDAO
+TK --> NV : 18: display
+deactivate TK
+deactivate TK
+NV -> TK : 19: click 1 customer
+activate TK
+TK -> CT : 20: call
+activate CT
+deactivate TK
+CT -> ODAO : 21: call
+activate ODAO
+ODAO -> ODAO : 22: getOrders()
+activate ODAO
+ODAO -> O : 23: call
+activate O
+O -> O : 24: Order4()
+activate O
+deactivate O
+O --> ODAO : 25: return
+deactivate O
+deactivate ODAO
+ODAO --> CT : 26: return
+deactivate ODAO
+CT -> CS : 27: call
+activate CS
+CS -> CS : 28: setter()
+activate CS
+deactivate CS
+CS --> CT : 29: return
+deactivate CS
+CT --> NV : 30: display
+deactivate CT
+NV -> CT : 31: click 1 order
+activate CT
+CT -> DH : 32: call
+activate DH
+deactivate CT
+DH -> ODAO : 33: call
+activate ODAO
+ODAO -> ODAO : 34: getOrder()
+activate ODAO
+ODAO -> O : 35: call
+activate O
+O -> O : 36: Order4()
+activate O
+deactivate O
+O --> ODAO : 37: return
+deactivate O
+deactivate ODAO
+ODAO --> DH : 38: return
+deactivate ODAO
+DH -> CS : 39: call
+activate CS
+CS -> CS : 40: setter()
+activate CS
+deactivate CS
+CS --> DH : 41: return
+deactivate CS
+DH -> LDAO : 42: call
+activate LDAO
+LDAO -> LDAO : 43: getOrderSubmissionProducts()
+activate LDAO
+LDAO -> Line : 44: call
+activate Line
+Line -> Line : 45: OrderSubmissionProduct4()
+activate Line
+deactivate Line
+Line --> LDAO : 46: return
+deactivate Line
+deactivate LDAO
+LDAO --> DH : 47: return
+deactivate LDAO
+DH --> NV : 48: display
+deactivate DH
+@enduml

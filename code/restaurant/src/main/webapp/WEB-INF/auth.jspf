@@ -1,0 +1,10 @@
+<%-- [NGOÀI THIẾT KẾ] Kiểm tra đăng nhập dùng chung module 1 (Hình 5) và module 2 (Hình 6).
+ Thuộc tính managementStaff đã thiết kế trên mọi trang quản lý, không truy vấn CSDL. --%>
+<%-- managementStaff : ManagementStaff4 (thuộc tính ẩn, session); tiền điều kiện đăng nhập. --%>
+<%
+ManagementStaff4 managementStaff = (ManagementStaff4) session.getAttribute("managementStaff");
+if (managementStaff == null) {
+    response.sendRedirect(request.getContextPath() + "/loginView4.jsp?err=timeout");
+    return;
+}
+%>

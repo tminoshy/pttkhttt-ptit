@@ -1,0 +1,68 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam ArrowColor black
+skinparam ArrowFontColor black
+skinparam actor {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+skinparam usecase {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+skinparam rectangle {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+hide stereotype
+left to right direction
+
+actor "Staff" as Staff4
+actor "Management staff" as ManagementStaff4
+actor "Warehouse staff" as WarehouseStaff4
+actor "Sales staff" as SalesStaff4
+actor "Customer" as Customer4
+Staff4 <|-- ManagementStaff4
+Staff4 <|-- WarehouseStaff4
+Staff4 <|-- SalesStaff4
+rectangle "Restaurant management system" {
+  usecase "Manage dish information 4" as UC_DishManagement
+  usecase "Create combo menu 4" as UC_CreateCombo
+  usecase "View statistics reports 4" as UC_ViewReports
+  usecase "Manage suppliers 4" as UC_SupplierManagement
+  usecase "Import ingredients 4" as UC_ReceiveIngredients
+  usecase "Receive customers 4" as UC_ReceiveCustomer
+  usecase "Take orders 4" as UC_TakeOrder
+  usecase "Receive payment at table 4" as UC_TablePayment
+  usecase "Issue membership card 4" as UC_IssueMembership
+  usecase "Confirm table reservation 4" as UC_ConfirmReservation
+  usecase "Confirm online order 4" as UC_ConfirmOnlineOrder
+  usecase "Search dishes 4" as UC_SearchDish
+  usecase "Book table online 4" as UC_OnlineReservation
+  usecase "Order food online 4" as UC_OnlineOrder
+  usecase "Login 4" as UC_Login
+}
+ManagementStaff4 -- UC_DishManagement
+ManagementStaff4 -- UC_CreateCombo
+ManagementStaff4 -- UC_ViewReports
+WarehouseStaff4 -- UC_SupplierManagement
+WarehouseStaff4 -- UC_ReceiveIngredients
+SalesStaff4 -- UC_ReceiveCustomer
+SalesStaff4 -- UC_TakeOrder
+SalesStaff4 -- UC_TablePayment
+SalesStaff4 -- UC_IssueMembership
+SalesStaff4 -- UC_ConfirmReservation
+SalesStaff4 -- UC_ConfirmOnlineOrder
+SalesStaff4 -- UC_OnlineOrder
+UC_OnlineOrder -- Customer4
+UC_SearchDish -- Customer4
+UC_OnlineReservation -- Customer4
+Staff4 -- UC_Login
+@enduml

@@ -1,0 +1,13 @@
+<%-- [NGOÀI THIẾT KẾ] Tiện ích hiển thị: mã hóa HTML và đọc chuỗi UTF-8; không thêm nghiệp vụ. --%>
+<%!
+private String h(Object value) {
+    if (value == null) return "";
+    return value.toString().replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        .replace("\"", "&quot;").replace("'", "&#39;");
+}
+private String p(jakarta.servlet.http.HttpServletRequest req, String name) {
+    String value = req.getParameter(name);
+    return value == null ? "" : value.trim();
+}
+%>
+<% request.setCharacterEncoding("UTF-8"); response.setHeader("Cache-Control", "no-store"); %>

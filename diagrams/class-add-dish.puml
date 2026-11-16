@@ -1,0 +1,75 @@
+@startuml
+!pragma layout smetana
+top to bottom direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 70
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam classAttributeIconSize 0
+skinparam ArrowColor black
+skinparam ArrowFontColor black
+skinparam class {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    AttributeFontColor black
+}
+hide circle
+hide empty methods
+class ManagerMainView4 {
+    -subManageDish
+    -subStatisticsReport
+}
+class DishManagementView4 {
+    -outDishList
+    -subAddDish
+    -subBackToMain
+}
+class AddDishView4 {
+    -inDishCode
+    -inDishName
+    -inDescription
+    -inSalePrice
+    -inSaleStatus
+    -inoutDishCategory
+    -inImage
+    -subSave
+    -outMessage
+    -subBackToDishList
+}
+abstract class Product4 {
+    -productCode
+    -name
+    -description
+    -salePrice
+    -image
+    -saleStatus
+    -createdAt
+    -updatedAt
+}
+class Dish4 {
+    --
+    +getDishes()
+    +validateDish()
+    +saveDish()
+}
+class DishCategory4 {
+    -categoryCode
+    -name
+    -description
+    +getDishCategories()
+}
+ManagerMainView4 -right- DishManagementView4
+DishManagementView4 -right- AddDishView4
+DishManagementView4 -- DishCategory4
+DishManagementView4 -down- Dish4
+AddDishView4 -- Dish4
+AddDishView4 -down- DishCategory4
+Product4 <|-- Dish4
+DishCategory4 o-- Dish4
+@enduml
+

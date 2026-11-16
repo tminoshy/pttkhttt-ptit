@@ -1,0 +1,5 @@
+target/
+__pycache__/
+*.log
+src/main/webapp/images/dishes/*
+!src/main/webapp/images/dishes/.gitkeep

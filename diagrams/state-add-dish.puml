@@ -1,0 +1,38 @@
+@startuml
+top to bottom direction
+hide empty description
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 18
+skinparam linetype ortho
+skinparam stateDiagramEdgeLabelStyle node
+skinparam nodesep 50
+skinparam ranksep 55
+skinparam ArrowColor black
+skinparam ArrowFontColor black
+skinparam ArrowFontName Arial
+skinparam ArrowFontSize 13
+skinparam ArrowThickness 1
+skinparam state {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+  FontName Arial
+  FontSize 14
+  StartColor black
+  EndColor black
+}
+
+state "Show main UI" as Main
+state "Show dish\nmanagement UI" as DishManagement
+state "Show add\ndish UI" as AddDish
+
+[*] -down-> Main
+Main -down-> DishManagement : [select Manage dish information]
+DishManagement -down-> AddDish : [click Add dish]
+DishManagement -up-> Main : [click Back to main page]
+AddDish -up-> DishManagement : [click Back to dish list]
+AddDish -down-> [*] : [click Save]
+@enduml
+

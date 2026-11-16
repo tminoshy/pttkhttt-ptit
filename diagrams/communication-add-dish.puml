@@ -1,0 +1,56 @@
+@startuml
+!pragma layout smetana
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam linetype polyline
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam ArrowColor black
+skinparam ArrowFontColor black
+skinparam ArrowFontName Arial
+skinparam ArrowFontSize 12
+skinparam ArrowThickness 1
+skinparam nodesep 70
+skinparam ranksep 80
+skinparam actor {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+skinparam boundary {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+skinparam entity {
+  BackgroundColor white
+  BorderColor black
+  FontColor black
+}
+
+actor "Management staff" as NVQL
+boundary ManagerMainView4
+boundary DishManagementView4
+boundary AddDishView4
+entity Dish4
+entity DishCategory4
+
+' Row 2: boundary objects in navigation order.
+ManagerMainView4 -right- DishManagementView4 : "2: call →"
+DishManagementView4 -right- AddDishView4 : "8: call →\n23: call ←"
+
+' Row 3: entity objects below their callers.
+DishManagementView4 -down- Dish4 : "3: call ↓\n5: return ↑\n24: call ↓\n26: return ↑"
+AddDishView4 -down- DishCategory4 : "9: call ↓\n11: return ↑"
+AddDishView4 -down- Dish4 : "16: call ↓\n18: return ↑\n19: call ↓\n21: return ↑"
+
+' Row 1: actor fan-out.
+NVQL -down- ManagerMainView4 : "1: select Manage dish information ↓"
+NVQL -down- DishManagementView4 : "6: display ↑\n7: click Add dish ↓\n27: display ↑"
+NVQL -down- AddDishView4 : "12: display ↑\n13: enter dish data ↓\n14: choose category and status ↓\n15: click Save ↓\n22: show success message ↑"
+
+' Entity self-messages.
+Dish4 -- Dish4 : "4: getDishes()\n17: validateDish()\n20: saveDish()\n25: getDishes()"
+DishCategory4 -- DishCategory4 : "10: getDishCategories()"
+@enduml

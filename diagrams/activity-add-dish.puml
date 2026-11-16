@@ -1,0 +1,98 @@
+@startuml
+' Biểu đồ thiết kế hoạt động module Thêm món ăn mới (Hình 7, desing.md §6a).
+' Theo mẫu Hình 4.13 của giáo trình: mỗi trang jsp là một vùng "Xử lí tại …jsp";
+' mỗi hoạt động lấy/kiểm tra/lưu dữ liệu nối hai chiều tới một phương thức DAO4 của Hình 5.
+' Alias: CHINH = gdChinhQuanLy, QLMA = gdQuanLyMonAn, THEM = gdThemMonAn, LUU = doLuuMonAn.
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam ArrowColor black
+skinparam ArrowFontColor black
+skinparam roundCorner 25
+skinparam rectangle {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+}
+skinparam label {
+    FontColor black
+}
+hide stereotype
+skinparam ranksep 70
+skinparam nodesep 60
+
+label "Start\n<size:20>●</size>" as Start
+label "<size:22>◉</size>\nEnd" as End
+
+rectangle "Process at managerMainView4.jsp" as CHINH {
+    rectangle "Get manager info" as CHINH_NhanQL
+    rectangle "Show UI" as CHINH_HienGD
+}
+rectangle "Process at dishManagementView4.jsp" as QLMA {
+    rectangle "Get manager info" as QLMA_NhanQL
+    rectangle "Get dish list" as QLMA_LayMon
+    rectangle "Get dish category list" as QLMA_LayLoai
+    rectangle "Show UI" as QLMA_HienGD
+}
+rectangle "Process at addDishView4.jsp" as THEM {
+    rectangle "Get manager info" as THEM_NhanQL
+    rectangle "Get dish category list" as THEM_LayLoai
+    rectangle "Show UI" as THEM_HienGD
+    rectangle "Show success message" as THEM_TB
+}
+rectangle "Process at doSaveDish4.jsp" as LUU {
+    rectangle "Get dish info" as LUU_NhanMon
+    rectangle "Validate dish info" as LUU_KiemTra
+    rectangle "Save dish" as LUU_Luu
+}
+rectangle "DishDAO4:\ngetDishes()" as DAO_getDishes
+rectangle "DishCategoryDAO4:\ngetDishCategories()" as DAO_getDishCategories_QLMA
+rectangle "DishCategoryDAO4:\ngetDishCategories()" as DAO_getDishCategories_THEM
+rectangle "DishDAO4:\nvalidateDish()" as DAO_validateDish
+rectangle "DishDAO4:\nsaveDish()" as DAO_saveDish
+
+' managerMainView4.jsp
+Start --> CHINH_NhanQL
+CHINH_NhanQL --> CHINH_HienGD
+CHINH_HienGD -[norank]-> QLMA_NhanQL : [click Manage dish information]
+
+' dishManagementView4.jsp
+QLMA_NhanQL --> QLMA_LayMon
+QLMA_LayMon <-[norank]-> DAO_getDishes
+QLMA_LayMon --> QLMA_LayLoai : [data loaded]
+QLMA_LayLoai <-[norank]-> DAO_getDishCategories_QLMA
+QLMA_LayLoai --> QLMA_HienGD : [data loaded]
+QLMA_HienGD -[norank]-> THEM_NhanQL : [click Add dish]
+QLMA_HienGD --> End : [new dish added]
+
+' addDishView4.jsp
+THEM_NhanQL --> THEM_LayLoai
+THEM_LayLoai <-[norank]-> DAO_getDishCategories_THEM
+THEM_LayLoai --> THEM_HienGD : [data loaded]
+THEM_HienGD -[norank]-> LUU_NhanMon : [click Save]
+THEM_TB -[norank]-> QLMA_NhanQL : [click OK]
+
+' doSaveDish4.jsp
+LUU_NhanMon --> LUU_KiemTra
+LUU_KiemTra <-[norank]-> DAO_validateDish
+LUU_KiemTra --> LUU_Luu : [valid]
+LUU_KiemTra -[norank]-> THEM_HienGD : [invalid]
+LUU_Luu <-[norank]-> DAO_saveDish
+LUU_Luu -[norank]-> THEM_TB : [saved]
+LUU_Luu -[norank]-> THEM_HienGD : [save failed]
+
+' Liên kết ẩn: chỉ xếp chỗ (vùng cùng hàng, nút DAO4 dưới vùng), không phải chuyển tiếp.
+CHINH -[hidden]right-> QLMA
+QLMA -[hidden]right-> THEM
+THEM -[hidden]right-> LUU
+THEM_HienGD -[hidden]down-> THEM_TB
+QLMA_HienGD -[hidden]down-> DAO_getDishes
+QLMA_HienGD -[hidden]down-> DAO_getDishCategories_QLMA
+THEM_TB -[hidden]down-> DAO_getDishCategories_THEM
+LUU_Luu -[hidden]down-> DAO_validateDish
+LUU_Luu -[hidden]down-> DAO_saveDish
+DAO_getDishes -[hidden]right-> DAO_getDishCategories_QLMA
+DAO_saveDish -[hidden]right-> DAO_validateDish
+@enduml

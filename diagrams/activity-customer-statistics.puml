@@ -1,0 +1,91 @@
+@startuml
+' Biểu đồ thiết kế hoạt động module Xem thống kê khách hàng theo doanh thu (Hình 9, desing.md §6a).
+' Bố cục một cột theo luồng (rule 09 HD-B5): smetana luôn xếp các vùng nối nhau thành một cột.
+' Khai báo đường đúng bốn khối của HD-B6; ba đường nhánh của vùng TK khai báo cuối, viết ngược chiều.
+' Alias: CHINH = managerMainView4, BC = statisticsReportView4, TK = customerStatisticsView4,
+'        CT = customerSpendingView4, DH = orderDetailView4.
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam ArrowColor black
+skinparam ArrowFontColor black
+skinparam roundCorner 25
+skinparam rectangle {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+}
+skinparam label {
+    FontColor black
+}
+hide stereotype
+skinparam ranksep 70
+skinparam nodesep 60
+
+
+label "Start\n<size:20>●</size>" as Start
+label "<size:22>◉</size>\nEnd" as End
+rectangle "Process at managerMainView4.jsp" as CHINH {
+    rectangle "Get manager info" as CHINH_NhanQL
+    rectangle "Show UI" as CHINH_HienGD
+}
+rectangle "Process at statisticsReportView4.jsp" as BC {
+    rectangle "Get manager info" as BC_NhanQL
+    rectangle "Show UI" as BC_HienGD
+}
+rectangle "Process at customerStatisticsView4.jsp" as TK {
+    rectangle "Get manager info" as TK_NhanQL
+    rectangle "Validate period" as TK_KiemTra
+    rectangle "Get customer statistics" as TK_LayTK
+    rectangle "Show UI" as TK_HienGD
+}
+rectangle "Process at customerSpendingView4.jsp" as CT {
+    rectangle "Get manager info" as CT_NhanQL
+    rectangle "Get order list" as CT_LayDon
+    rectangle "Show UI" as CT_HienGD
+}
+rectangle "Process at orderDetailView4.jsp" as DH {
+    rectangle "Get manager info" as DH_NhanQL
+    rectangle "Get order info" as DH_LayDon
+    rectangle "Get order lines" as DH_LayDong
+    rectangle "Show UI" as DH_HienGD
+}
+rectangle "CustomerStatisticDAO4:\nvalidatePeriod()" as DAO_validatePeriod
+rectangle "CustomerStatisticDAO4:\ngetCustomerStatistics()" as DAO_getCustomerStatistics
+rectangle "OrderDAO4:\ngetOrders()" as DAO_getOrders
+rectangle "OrderDAO4:\ngetOrder()" as DAO_getOrder
+rectangle "OrderSubmissionProductDAO4:\ngetOrderSubmissionProducts()" as DAO_getOrderSubmissionProducts
+Start --> CHINH_NhanQL
+CHINH_NhanQL --> CHINH_HienGD
+CHINH_HienGD -[norank]-> BC_NhanQL : [click View statistics\nreports]
+BC_NhanQL --> BC_HienGD
+BC_HienGD -[norank]-> TK_NhanQL : [click Customer statistics\nby revenue]
+TK_NhanQL --> TK_KiemTra : [period chosen]
+TK_KiemTra --> TK_LayTK : [valid]
+TK_LayTK --> TK_HienGD : [data loaded]
+TK_HienGD -[norank]-> CT_NhanQL : [click 1 customer]
+CT_NhanQL --> CT_LayDon
+CT_LayDon --> CT_HienGD : [data loaded]
+CT_HienGD -[norank]-> DH_NhanQL : [click 1 order]
+DH_NhanQL --> DH_LayDon
+DH_LayDon --> DH_LayDong : [data loaded]
+DH_LayDong --> DH_HienGD : [data loaded]
+DH_HienGD --> End : [done viewing]
+TK_KiemTra <-[norank]-> DAO_validatePeriod
+TK_LayTK <-[norank]-> DAO_getCustomerStatistics
+CT_LayDon <-[norank]-> DAO_getOrders
+DH_LayDon <-[norank]-> DAO_getOrder
+DH_LayDong <-[norank]-> DAO_getOrderSubmissionProducts
+TK_HienGD -[hidden]down-> DAO_validatePeriod
+TK_HienGD -[hidden]down-> DAO_getCustomerStatistics
+DAO_validatePeriod -[hidden]right-> DAO_getCustomerStatistics
+CT_HienGD -[hidden]down-> DAO_getOrders
+DH_HienGD -[hidden]down-> DAO_getOrder
+DH_HienGD -[hidden]down-> DAO_getOrderSubmissionProducts
+DAO_getOrder -[hidden]right-> DAO_getOrderSubmissionProducts
+TK_HienGD <-[norank]- TK_KiemTra : [invalid]
+TK_HienGD <-[norank]- TK_NhanQL : [no period chosen]
+TK_NhanQL <-[norank]- TK_HienGD : [click View statistics]
+@enduml

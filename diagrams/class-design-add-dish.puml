@@ -1,0 +1,145 @@
+@startuml
+
+top to bottom direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam linetype ortho
+skinparam nodesep 65
+skinparam ranksep 90
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+skinparam defaultFontColor black
+skinparam classAttributeIconSize 0
+skinparam ArrowColor black
+skinparam class {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    AttributeFontColor black
+}
+hide circle
+hide empty methods
+
+'tầng giao diện
+together {
+together {
+class "managerMainView4.jsp" as gdChinhQuanLy {
+    -subManageDish : link
+    -subStatisticsReport : link
+    -managementStaff : ManagementStaff4
+}
+class "dishManagementView4.jsp" as gdQuanLyMonAn {
+    -outDishList : Table
+    -subAddDish : submit
+    -subBackToMain : submit
+    -dishes : Dish4[]
+    -dishCategories : DishCategory4[]
+    -managementStaff : ManagementStaff4
+}
+}
+together {
+class "addDishView4.jsp" as gdThemMonAn {
+    -inDishCode : text
+    -inDishName : text
+    -inDescription : text
+    -inSalePrice : number
+    -inSaleStatus : Select
+    -inoutDishCategory : Select
+    -inImage : file
+    -subSave : submit
+    -outMessage : Label
+    -subBackToDishList : submit
+    -dishCategories : DishCategory4[]
+    -dish : Dish4
+    -managementStaff : ManagementStaff4
+}
+class "doSaveDish4.jsp" as doLuuMonAn {
+    -dish : Dish4
+}
+}
+}
+
+' tầng thao tác dữ liệu
+together {
+abstract class DAO4 {
+    {static} #con : Connection
+    +DAO4()
+}
+class DishDAO4 {
+    +DishDAO4()
+    +getDishes() : Dish4[]
+    +validateDish(dish : Dish4, idDishCategory : int) : String[]
+    +saveDish(dish : Dish4, idDishCategory : int) : Dish4
+}
+class DishCategoryDAO4 {
+    +DishCategoryDAO4()
+    +getDishCategories() : DishCategory4[]
+}
+}
+
+' tầng thực thể: giữ nguyên hộp từ class-entity-design.puml
+abstract class Product4 {
+    -id : int
+    -productCode : String
+    -name : String
+    -description : String
+    -salePrice : float
+    -image : String
+    -saleStatus : String
+    -createdAt : Date
+    -updatedAt : Date
+}
+class Dish4 {
+}
+class DishCategory4 {
+    -id : int
+    -categoryCode : String
+    -name : String
+    -description : String
+    -dishes : Dish4[]
+}
+class ManagementStaff4 {
+}
+abstract class Staff4 {
+    -id : int
+    -fullName : String
+    -phoneNumber : String
+    -email : String
+    -workingStatus : String
+    -account : Account4
+}
+class Account4 {
+    -id : int
+    -username : String
+    -password : String
+    -accountStatus : String
+}
+
+gdChinhQuanLy -right- gdQuanLyMonAn
+gdQuanLyMonAn -right- gdThemMonAn
+gdThemMonAn -right- doLuuMonAn
+gdQuanLyMonAn -down- DishDAO4
+gdQuanLyMonAn -down- DishCategoryDAO4
+gdThemMonAn -down- DishCategoryDAO4
+doLuuMonAn -down- DishDAO4
+DAO4 <|-- DishDAO4
+DishDAO4 -down- Dish4
+DAO4 <|-- DishCategoryDAO4
+DishCategoryDAO4 -down- DishCategory4
+Staff4 <|-- ManagementStaff4
+Product4 <|-- Dish4
+Staff4 *-- Account4
+DishCategory4 o-- Dish4
+gdChinhQuanLy -[hidden]down- DAO4
+gdQuanLyMonAn -[hidden]down- DAO4
+gdThemMonAn -[hidden]down- DAO4
+doLuuMonAn -[hidden]down- DAO4
+DishDAO4 -[hidden]down- Staff4
+DishCategoryDAO4 -[hidden]down- Staff4
+DishDAO4 -[hidden]down- Product4
+DishCategoryDAO4 -[hidden]down- Product4
+gdChinhQuanLy -[hidden]right-> gdQuanLyMonAn
+gdQuanLyMonAn -[hidden]right-> gdThemMonAn
+gdThemMonAn -[hidden]right-> doLuuMonAn
+@enduml
