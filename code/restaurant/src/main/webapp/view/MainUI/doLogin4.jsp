@@ -16,7 +16,7 @@ try {
         request.changeSessionId();
         // managementStaff : ManagementStaff4 (thuộc tính ẩn, session).
         session.setAttribute("managementStaff", managementStaff);
-        response.sendRedirect("quanly/managerMainView4.jsp"); return;
+        response.sendRedirect(request.getContextPath() + "/view/ManagementStaff/managerMainView4.jsp"); return;
     }
 } catch (IllegalStateException e) { application.log("Login failed", e); }
 response.sendRedirect("loginView4.jsp?err=login");

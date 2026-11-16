@@ -130,7 +130,7 @@ def check_activity(activity, class_design):
     for action, node in expected_calls.items():
         if node not in dao_nodes: continue
         cls, method = dao_nodes[node]
-        source = APP / 'src/main/webapp/quanly' / pages[action.split('_')[0]]
+        source = APP / 'src/main/webapp/view/ManagementStaff' / pages[action.split('_')[0]]
         page_text = source.read_text()
         variables = re.findall(rf'\b(\w+)\s*=\s*new\s+{cls}\s*\(', page_text)
         if not any(re.search(rf'\b{variable}\.{method}\s*\(', page_text) for variable in variables):
@@ -257,7 +257,7 @@ def check_statistics_activity(activity, class_design):
     if Counter(dao_edges) != Counter((action,'DAO_'+method) for action,(_,method) in calls.items()):
         errors.append('Module 2: sai liên kết hoạt động–DAO4')
     for action,(cls,method) in calls.items():
-        source = APP / 'src/main/webapp/quanly' / pages[action.split('_')[0]]
+        source = APP / 'src/main/webapp/view/ManagementStaff' / pages[action.split('_')[0]]
         variables = re.findall(rf'\b(\w+)\s*=\s*new\s+{cls}\s*\(', source.read_text())
         if not any(re.search(rf'\b{variable}\.{method}\s*\(',source.read_text()) for variable in variables):
             errors.append(f'Trang {source.name} không gọi {cls}.{method}()')

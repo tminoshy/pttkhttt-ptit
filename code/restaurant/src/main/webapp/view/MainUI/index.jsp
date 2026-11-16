@@ -5,4 +5,4 @@
  =================================================================== --%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="model.*,dao.*" %>
 <%@ include file="/WEB-INF/common.jspf" %>
-<% response.sendRedirect("loginView4.jsp"); %>
+<% response.sendRedirect(request.getContextPath() + "/view/MainUI/loginView4.jsp"); %>

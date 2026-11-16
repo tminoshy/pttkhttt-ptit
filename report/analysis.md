@@ -20,13 +20,109 @@ Phần kịch bản triển khai hai module Thêm món ăn mới và Xem thống
 
 ### b Kịch bản cho module Xem thống kê khách hàng
 
-| Use case | View customer statistics by revenue 4 |
-| --- | --- |
-| Actor | Nhân viên quản lý. |
-| Tiền điều kiện | Nhân viên quản lý đã đăng nhập thành công bằng tài khoản đang hoạt động và đang ở giao diện chính. |
-| Hậu điều kiện | Nhân viên xem được thống kê khách hàng hoặc nhóm No name, chi tiết chi tiêu, danh sách đơn và chi tiết đơn thuộc đúng kỳ và đối tượng đã chọn; dữ liệu khách hàng, đơn, hóa đơn và thanh toán không thay đổi. |
-| Kịch bản chính | 1. Nhân viên quản lý chọn View statistics reports từ giao diện chính.<br>2. Hệ thống hiển thị các loại thống kê: món ăn, nguyên liệu, khách hàng và nhà cung cấp.<br>3. Nhân viên chọn Customer statistics by revenue.<br>4. Hệ thống hiển thị ô Ngày bắt đầu, ô Ngày kết thúc và nút View statistics.<br>5. Nhân viên chọn Ngày bắt đầu 01/08/2026, Ngày kết thúc 31/08/2026 và chọn View statistics.<br>6. Hệ thống kiểm tra ngày bắt đầu không sau ngày kết thúc; tổng hợp các hóa đơn đã thanh toán thành công, có thời điểm thanh toán từ đầu ngày 01/08/2026 đến hết ngày 31/08/2026. Hóa đơn được nhóm theo hồ sơ khách; đơn không gắn hồ sơ khách được gom vào nhóm No name. Mỗi hóa đơn hợp lệ chỉ được tính một lần, không cộng các lần thanh toán thất bại hoặc thử lại.<br>7. Hệ thống hiển thị danh sách mã khách, tên hiển thị và tổng chi tiêu, sắp xếp theo tổng chi tiêu giảm dần; các ô thời gian giữ nguyên để đổi kỳ khi cần. Dòng No name để trống mã khách và chỉ xuất hiện khi phát sinh dữ liệu trong kỳ. Kết quả minh họa như sau, các khoản tiền tính bằng đồng:<br>Mã khách<br>Tên hiển thị<br>Tổng chi tiêu<br>KH001<br>Nguyễn Văn An<br>4.250.000<br>KH002<br>Trần Thị Bình<br>2.180.000<br>No name<br>1.350.000<br>8. Nhân viên chọn dòng KH001 – Nguyễn Văn An để xem chi tiết chi tiêu.<br>9. Hệ thống hiển thị mã KH001, tên Nguyễn Văn An, kỳ 01/08/2026–31/08/2026, tổng chi tiêu 4.250.000 đồng, nút Back to statistic list và danh sách các đơn tạo nên tổng này. Nếu chọn No name ở bước 8, mã khách để trống, tên hiển thị là No name và chỉ liệt kê các đơn không gắn hồ sơ khách trong cùng kỳ. Danh sách minh họa cho KH001 như sau:<br>Mã đơn<br>Thời điểm thanh toán<br>Số tiền<br>DH101<br>03/08/2026 20:05<br>750.000<br>DH102<br>08/08/2026 11:42<br>620.000<br>DH103<br>15/08/2026 20:36<br>1.100.000<br>DH104<br>22/08/2026 18:02<br>880.000<br>DH105<br>29/08/2026 13:25<br>900.000<br>10. Nhân viên chọn đơn DH103 trong danh sách của KH001.<br>11. Hệ thống hiển thị chi tiết đơn DH103 thuộc KH001, hóa đơn HD103 đã thanh toán thành công lúc 15/08/2026 20:36 và tổng tiền 1.100.000 đồng. Các dòng tính tiền là món hoặc combo đã được chấp nhận, chưa hủy; đơn giá là giá đã ghi nhận khi gọi món. Giao diện có nút Back to order list. Chi tiết minh họa như sau:<br>Món hoặc combo<br>Số lượng<br>Đơn giá<br>Thành tiền<br>Lẩu hải sản<br>1<br>650.000<br>650.000<br>Combo nước<br>2<br>75.000<br>150.000<br>Cơm rang hải sản<br>2<br>150.000<br>300.000<br>12. Nếu muốn xem đơn khác, nhân viên dùng Quay lại danh sách đơn, hệ thống hiển thị lại danh sách ở bước 9 rồi lặp các bước 10–11. Nếu muốn xem khách khác, nhân viên dùng Quay lại danh sách thống kê rồi lặp các bước 8–11. Nếu đổi kỳ, nhân viên trở về màn hình thống kê và thực hiện lại các bước 5–11. Việc xem kết thúc khi nhân viên không yêu cầu xem thêm. |
-| Ngoại lệ | 6. Ngày bắt đầu sau ngày kết thúc: hệ thống không lập báo cáo, đánh dấu điều kiện lỗi và yêu cầu chọn lại; nhân viên sửa khoảng ngày rồi thực hiện lại các bước 5–6 đến khi hợp lệ hoặc dừng xem.<br>6. Tổng hợp dữ liệu thất bại: hệ thống thông báo chưa thể lập báo cáo, không hiển thị số liệu tổng hợp dở dang và không thay đổi dữ liệu nguồn.<br>7. Không có hóa đơn hợp lệ trong kỳ: hệ thống hiển thị danh sách rỗng, giữ nguyên điều kiện thời gian và cho phép nhân viên quay lại bước 5 để chọn kỳ khác; không thực hiện các bước 8–11 khi danh sách rỗng.<br>8. Khách hàng hoặc nhóm đang chọn không còn phù hợp bộ lọc: hệ thống thông báo dữ liệu đã thay đổi và tải lại danh sách thống kê theo điều kiện hiện tại, trở về bước 7.<br>10. Đơn được chọn không còn thuộc khách hàng hoặc nhóm No name và kỳ đang xem, hoặc hóa đơn không còn hợp lệ: hệ thống thông báo dữ liệu đã thay đổi và tải lại danh sách đơn theo điều kiện hiện tại, trở về bước 9. |
++------------------+--------------------------------------------------------------------------------------------------+
+| Use case         | View customer statistics by revenue 4                                                            |
++==================+==================================================================================================+
+| Actor            | Nhân viên quản lý.                                                                               |
++------------------+--------------------------------------------------------------------------------------------------+
+| Tiền điều kiện   | Nhân viên quản lý đã đăng nhập thành công bằng tài khoản đang hoạt động và đang ở giao diện      |
+|                  | chính.                                                                                           |
++------------------+--------------------------------------------------------------------------------------------------+
+| Hậu điều kiện    | Nhân viên xem được thống kê khách hàng hoặc nhóm No name, chi tiết chi tiêu, danh sách đơn và    |
+|                  | chi tiết đơn thuộc đúng kỳ và đối tượng đã chọn; dữ liệu khách hàng, đơn, hóa đơn và thanh toán  |
+|                  | không thay đổi.                                                                                  |
++------------------+--------------------------------------------------------------------------------------------------+
+| Kịch bản chính   | 1\. Nhân viên quản lý chọn View statistics reports từ giao diện chính.                           |
+|                  |                                                                                                  |
+|                  | 2\. Hệ thống hiển thị các loại thống kê: món ăn, nguyên liệu, khách hàng và nhà cung cấp.        |
+|                  |                                                                                                  |
+|                  | 3\. Nhân viên chọn Customer statistics by revenue.                                               |
+|                  |                                                                                                  |
+|                  | 4\. Hệ thống hiển thị ô Ngày bắt đầu, ô Ngày kết thúc và nút View statistics.                    |
+|                  |                                                                                                  |
+|                  | 5\. Nhân viên chọn Ngày bắt đầu 01/08/2026, Ngày kết thúc 31/08/2026 và chọn View statistics.    |
+|                  |                                                                                                  |
+|                  | 6\. Hệ thống kiểm tra ngày bắt đầu không sau ngày kết thúc; tổng hợp các hóa đơn đã thanh toán   |
+|                  | thành công, có thời điểm thanh toán từ đầu ngày 01/08/2026 đến hết ngày 31/08/2026. Hóa đơn được |
+|                  | nhóm theo hồ sơ khách; đơn không gắn hồ sơ khách được gom vào nhóm No name. Mỗi hóa đơn hợp lệ   |
+|                  | chỉ được tính một lần, không cộng các lần thanh toán thất bại hoặc thử lại.                      |
+|                  |                                                                                                  |
+|                  | 7\. Hệ thống hiển thị danh sách mã khách, tên hiển thị và tổng chi tiêu, sắp xếp theo tổng chi   |
+|                  | tiêu giảm dần; các ô thời gian giữ nguyên để đổi kỳ khi cần. Dòng No name để trống mã khách và   |
+|                  | chỉ xuất hiện khi phát sinh dữ liệu trong kỳ. Kết quả minh họa như sau, các khoản tiền tính bằng |
+|                  | đồng:                                                                                            |
+|                  |                                                                                                  |
+|                  | +----------+---------------+---------------+                                                     |
+|                  | | Mã khách | Tên hiển thị  | Tổng chi tiêu |                                                     |
+|                  | +==========+===============+===============+                                                     |
+|                  | | KH001    | Nguyễn Văn An | 4.250.000     |                                                     |
+|                  | +----------+---------------+---------------+                                                     |
+|                  | | KH002    | Trần Thị Bình | 2.180.000     |                                                     |
+|                  | +----------+---------------+---------------+                                                     |
+|                  | |          | No name       | 1.350.000     |                                                     |
+|                  | +----------+---------------+---------------+                                                     |
+|                  |                                                                                                  |
+|                  | 8\. Nhân viên chọn dòng KH001 – Nguyễn Văn An để xem chi tiết chi tiêu.                          |
+|                  |                                                                                                  |
+|                  | 9\. Hệ thống hiển thị mã KH001, tên Nguyễn Văn An, kỳ 01/08/2026–31/08/2026, tổng chi tiêu       |
+|                  | 4.250.000 đồng, nút Back to statistic list và danh sách các đơn tạo nên tổng này. Nếu chọn No    |
+|                  | name ở bước 8, mã khách để trống, tên hiển thị là No name và chỉ liệt kê các đơn không gắn hồ sơ |
+|                  | khách trong cùng kỳ. Danh sách minh họa cho KH001 như sau:                                       |
+|                  |                                                                                                  |
+|                  | +--------+----------------------+-----------+                                                    |
+|                  | | Mã đơn | Thời điểm thanh toán | Số tiền   |                                                    |
+|                  | +========+======================+===========+                                                    |
+|                  | | DH101  | 03/08/2026 20:05     | 750.000   |                                                    |
+|                  | +--------+----------------------+-----------+                                                    |
+|                  | | DH102  | 08/08/2026 11:42     | 620.000   |                                                    |
+|                  | +--------+----------------------+-----------+                                                    |
+|                  | | DH103  | 15/08/2026 20:36     | 1.100.000 |                                                    |
+|                  | +--------+----------------------+-----------+                                                    |
+|                  | | DH104  | 22/08/2026 18:02     | 880.000   |                                                    |
+|                  | +--------+----------------------+-----------+                                                    |
+|                  | | DH105  | 29/08/2026 13:25     | 900.000   |                                                    |
+|                  | +--------+----------------------+-----------+                                                    |
+|                  |                                                                                                  |
+|                  | 10\. Nhân viên chọn đơn DH103 trong danh sách của KH001.                                         |
+|                  |                                                                                                  |
+|                  | 11\. Hệ thống hiển thị chi tiết đơn DH103 thuộc KH001, hóa đơn HD103 đã thanh toán thành công    |
+|                  | lúc 15/08/2026 20:36 và tổng tiền 1.100.000 đồng. Các dòng tính tiền là món hoặc combo đã được   |
+|                  | chấp nhận, chưa hủy; đơn giá là giá đã ghi nhận khi gọi món. Giao diện có nút Back to order      |
+|                  | list. Chi tiết minh họa như sau:                                                                 |
+|                  |                                                                                                  |
+|                  | +------------------+----------+---------+------------+                                           |
+|                  | | Món hoặc combo   | Số lượng | Đơn giá | Thành tiền |                                           |
+|                  | +==================+==========+=========+============+                                           |
+|                  | | Lẩu hải sản      | 1        | 650.000 | 650.000    |                                           |
+|                  | +------------------+----------+---------+------------+                                           |
+|                  | | Combo nước       | 2        | 75.000  | 150.000    |                                           |
+|                  | +------------------+----------+---------+------------+                                           |
+|                  | | Cơm rang hải sản | 2        | 150.000 | 300.000    |                                           |
+|                  | +------------------+----------+---------+------------+                                           |
+|                  |                                                                                                  |
+|                  | 12\. Nếu muốn xem đơn khác, nhân viên dùng Quay lại danh sách đơn, hệ thống hiển thị lại danh    |
+|                  | sách ở bước 9 rồi lặp các bước 10–11. Nếu muốn xem khách khác, nhân viên dùng Quay lại danh sách |
+|                  | thống kê rồi lặp các bước 8–11. Nếu đổi kỳ, nhân viên trở về màn hình thống kê và thực hiện lại  |
+|                  | các bước 5–11. Việc xem kết thúc khi nhân viên không yêu cầu xem thêm.                           |
++------------------+--------------------------------------------------------------------------------------------------+
+| Ngoại lệ         | 6\. Ngày bắt đầu sau ngày kết thúc: hệ thống không lập báo cáo, đánh dấu điều kiện lỗi và yêu    |
+|                  | cầu chọn lại; nhân viên sửa khoảng ngày rồi thực hiện lại các bước 5–6 đến khi hợp lệ hoặc dừng  |
+|                  | xem.                                                                                             |
+|                  |                                                                                                  |
+|                  | 6\. Tổng hợp dữ liệu thất bại: hệ thống thông báo chưa thể lập báo cáo, không hiển thị số liệu   |
+|                  | tổng hợp dở dang và không thay đổi dữ liệu nguồn.                                                |
+|                  |                                                                                                  |
+|                  | 7\. Không có hóa đơn hợp lệ trong kỳ: hệ thống hiển thị danh sách rỗng, giữ nguyên điều kiện     |
+|                  | thời gian và cho phép nhân viên quay lại bước 5 để chọn kỳ khác; không thực hiện các bước 8–11   |
+|                  | khi danh sách rỗng.                                                                              |
+|                  |                                                                                                  |
+|                  | 8\. Khách hàng hoặc nhóm đang chọn không còn phù hợp bộ lọc: hệ thống thông báo dữ liệu đã thay  |
+|                  | đổi và tải lại danh sách thống kê theo điều kiện hiện tại, trở về bước 7.                        |
+|                  |                                                                                                  |
+|                  | 10\. Đơn được chọn không còn thuộc khách hàng hoặc nhóm No name và kỳ đang xem, hoặc hóa đơn     |
+|                  | không còn hợp lệ: hệ thống thông báo dữ liệu đã thay đổi và tải lại danh sách đơn theo điều kiện |
+|                  | hiện tại, trở về bước 9.                                                                         |
++------------------+--------------------------------------------------------------------------------------------------+
 
 ## 2 Trích lớp thực thể
 

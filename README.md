@@ -2,6 +2,8 @@
 
 A Java/JSP web app in [code/restaurant](code/restaurant) with two modules: **Add a new dish** and **View customer statistics by revenue**.
 
+The JSP view folders match the package diagram under `src/main/webapp/view/`: `MainUI` contains the entry and login pages, `ManagementStaff` contains both modules, and `SaleStaff` and `WarehouseStaff` are placeholders. Java packages `dao` and `model` remain under `src/main/java/`.
+
 ## Run with Docker (recommended)
 
 Requires Docker Engine with Compose v2.

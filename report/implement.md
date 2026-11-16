@@ -23,9 +23,14 @@ code/restaurant/
   src/main/java/dao/{DAO4,DishDAO4,DishCategoryDAO4,StaffDAO4}.java
   src/main/resources/db.properties
   src/main/webapp/
-    index.jsp, loginView4.jsp, doLogin4.jsp
-    quanly/{gdChinhQuanLy,gdQuanLyMonAn,gdThemMonAn,doLuuMonAn}.jsp
-    WEB-INF/{common,auth}.jspf
+    view/
+      MainUI/{index,loginView4,doLogin4}.jsp
+      ManagementStaff/{managerMainView4,dishManagementView4,addDishView4,doSaveDish4}.jsp
+      ManagementStaff/{statisticsReportView4,customerStatisticsView4,customerSpendingView4,orderDetailView4}.jsp
+      SaleStaff/.gitkeep
+      WarehouseStaff/.gitkeep
+    WEB-INF/{common,auth,statistics}.jspf
+    WEB-INF/web.xml
     META-INF/context.xml
     images/dishes/
   src/test/java/dao/{DatabaseTest4,DishDAOTest4,DishCategoryDAOTest4,StaffDAOTest4}.java
@@ -36,7 +41,9 @@ Phần module 1 trong `schema.sql` tạo bốn bảng, dùng InnoDB, unique củ
 
 `db.properties` chứa cấu hình phát triển; có thể truyền `-Ddb.config=/đường/dẫn/db.properties` cho JVM Tomcat để dùng cấu hình khác. Ảnh đặt trong thư mục triển khai `images/dishes`, CSDL chỉ giữ đường dẫn tương đối. Cần triển khai WAR dạng thư mục và cấp quyền ghi thư mục này; ảnh sẽ mất khi triển khai lại. Mã món dùng làm tên ảnh, các ký tự không an toàn được mã hóa, chỉ nhận phần mở rộng ảnh, không ghi đè file có sẵn và dọn file mới khi giao dịch thất bại. Trình duyệt yêu cầu chọn lại file khi sửa lỗi biểu mẫu.
 
-`index.jsp`, hai trang đăng nhập và StaffDAO4 chỉ thực hiện tiền điều kiện nhân viên quản lý đã đăng nhập. WEB-INF/auth.jspf kiểm tra session, WEB-INF/common.jspf đọc UTF-8 và mã hóa dữ liệu trước khi đưa vào HTML. Đây là phần hạ tầng ngoài biểu đồ module, không thêm chức năng nghiệp vụ. Tương tự, cấu hình, dữ liệu SQL, lưu file, kiểm thử và công cụ truy vết nằm ngoài biểu đồ.
+Gói `view` gồm `MainUI`, `ManagementStaff`, `SaleStaff` và `WarehouseStaff`. `MainUI` chứa điểm vào và hai trang đăng nhập; `ManagementStaff` chứa giao diện của hai module đã cài đặt. `SaleStaff` và `WarehouseStaff` mới giữ chỗ bằng `.gitkeep`. Các gói Java `dao` và `model` nằm trong `src/main/java`.
+
+`view/MainUI/index.jsp`, hai trang đăng nhập và StaffDAO4 chỉ thực hiện tiền điều kiện nhân viên quản lý đã đăng nhập. WEB-INF/web.xml khai báo trang chào `view/MainUI/index.jsp` để truy cập gốc ứng dụng vẫn mở trang đăng nhập. WEB-INF/auth.jspf kiểm tra session, WEB-INF/common.jspf đọc UTF-8 và mã hóa dữ liệu trước khi đưa vào HTML. Đây là phần hạ tầng ngoài biểu đồ module, không thêm chức năng nghiệp vụ. Tương tự, cấu hình, dữ liệu SQL, lưu file, kiểm thử và công cụ truy vết nằm ngoài biểu đồ.
 
 ### b Mẫu lớp thực thể, thuộc tính và phương thức
 
@@ -687,7 +694,7 @@ public class StaffDAO4 extends DAO4 {
 
 Các tệp JSP là lớp giao diện trong Hình 5; Tomcat sinh lớp servlet tương ứng khi chạy. Chúng không khai báo phương thức nghiệp vụ riêng. Mẫu bên dưới là mã JSP thực thi; tên và kiểu thuộc tính hiện được ghi cạnh HTML, còn thuộc tính ẩn được đặt trong request/session đúng tên thiết kế. Thông tin người dùng từ session được kiểm tra trước khi truy vấn hoặc lưu.
 
-**managerMainView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/managerMainView4.jsp).
+**managerMainView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/view/ManagementStaff/managerMainView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -720,7 +727,7 @@ Các tệp JSP là lớp giao diện trong Hình 5; Tomcat sinh lớp servlet t�
 
 Đọc managementStaff từ session, thiếu thì chuyển đăng nhập với err=timeout. Link subManageDish mở danh sách (v.2 1–2, v.3 1–2). subStatisticsReport mở trang statisticsReportView4.jsp dùng chung với module thống kê.
 
-**dishManagementView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp).
+**dishManagementView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -778,7 +785,7 @@ request.setAttribute("dishCategories", dishCategories);
 
 Gọi getDishes và getDishCategories, đặt hai mảng vào request rồi hiển thị bảng. Cột loại món đối chiếu từng DishCategory4.dishes[].id với Dish4.id. Các nút mở biểu mẫu thêm hoặc quay về trang chính (v.2 3–8,24–27; v.3 3–17,46–58). Danh sách được truy vấn lại sau khi lưu.
 
-**addDishView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/addDishView4.jsp).
+**addDishView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -869,7 +876,7 @@ String enteredPrice = p(request, "inSalePrice");
 
 Đọc danh sách loại và hiển thị form multipart. A1: danh sách loại rỗng thì thông báo và vô hiệu hóa Lưu. Khi doSaveDish4.jsp trả về, trang chỉ nhận các tên có trên biểu đồ: điền lại các ô từ thuộc tính ẩn dish, chọn lại loại và giá từ chính tham số inoutDishCategory, inSalePrice của biểu mẫu, và hiển thị nội dung outMessage. Khi dish.id > 0 (saveDish đã gán id), trang hiển thị thông báo thành công, khóa biểu mẫu và chuyển về danh sách sau hai giây hoặc khi click OK (v.2 9–15,22–23; v.3 18–26,37–45). Nút quay lại không gửi dữ liệu tới trang lưu.
 
-**doSaveDish4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp).
+**doSaveDish4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -1011,68 +1018,68 @@ Công cụ kiểm tra đủ 58 số chính và bốn nhánh, đồng thời so s
 
 | Bước / nhánh | Vị trí mã (file:dòng) |
 | --- | --- |
-| 1 | `code/restaurant/src/main/webapp/quanly/managerMainView4.jsp:18` |
-| 2 | `code/restaurant/src/main/webapp/quanly/managerMainView4.jsp:19` |
-| 3 | `code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:18` |
-| 4 | `code/restaurant/src/main/java/dao/DishDAO4.java:25`<br>`code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:20` |
+| 1 | `code/restaurant/src/main/webapp/view/ManagementStaff/managerMainView4.jsp:18` |
+| 2 | `code/restaurant/src/main/webapp/view/ManagementStaff/managerMainView4.jsp:19` |
+| 3 | `code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:18` |
+| 4 | `code/restaurant/src/main/java/dao/DishDAO4.java:25`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:20` |
 | 5 | `code/restaurant/src/main/java/dao/DishDAO4.java:33` |
 | 6 | `code/restaurant/src/main/java/dao/DishDAO4.java:35` |
 | 7 | `code/restaurant/src/main/java/dao/DishDAO4.java:45` |
 | 8 | `code/restaurant/src/main/java/dao/DishDAO4.java:48` |
-| 9 | `code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:24` |
-| 10 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:28`<br>`code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:26` |
+| 9 | `code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:24` |
+| 10 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:28`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:26` |
 | 11 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:35` |
 | 12 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:37`<br>`code/restaurant/src/main/java/dao/DishCategoryDAO4.java:51` |
 | 13 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:41` |
 | 14 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:54` |
-| 15 | `code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:33` |
-| 16 | `code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:46` |
-| 17 | `code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:44` |
-| 18 | `code/restaurant/src/main/webapp/quanly/addDishView4.jsp:22` |
-| 19 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:28`<br>`code/restaurant/src/main/webapp/quanly/addDishView4.jsp:24` |
+| 15 | `code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:33` |
+| 16 | `code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:46` |
+| 17 | `code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:44` |
+| 18 | `code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:22` |
+| 19 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:28`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:24` |
 | 20 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:35` |
 | 21 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:37`<br>`code/restaurant/src/main/java/dao/DishCategoryDAO4.java:51` |
 | 22 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:41` |
 | 23 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:55` |
-| 24 | `code/restaurant/src/main/webapp/quanly/addDishView4.jsp:57` |
-| 25 | `code/restaurant/src/main/webapp/quanly/addDishView4.jsp:61` |
-| 26 | `code/restaurant/src/main/webapp/quanly/addDishView4.jsp:58` |
-| 27 | `code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:20` |
-| 28 | `code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:25` |
-| 29 | `code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:34` |
-| 30 | `code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:35` |
-| 31 | `code/restaurant/src/main/java/dao/DishDAO4.java:58`<br>`code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:37` |
-| 32 | `code/restaurant/src/main/java/dao/DishDAO4.java:82`<br>`code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:39` |
-| 33 | `code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:76` |
-| 34 | `code/restaurant/src/main/java/dao/DishDAO4.java:92`<br>`code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:77` |
-| 35 | `code/restaurant/src/main/java/dao/DishDAO4.java:115`<br>`code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:79` |
-| 36 | `code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:91` |
-| 37 | `code/restaurant/src/main/webapp/quanly/addDishView4.jsp:22` |
-| 38 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:28`<br>`code/restaurant/src/main/webapp/quanly/addDishView4.jsp:24` |
+| 24 | `code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:57` |
+| 25 | `code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:61` |
+| 26 | `code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:58` |
+| 27 | `code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:20` |
+| 28 | `code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:25` |
+| 29 | `code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:34` |
+| 30 | `code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:35` |
+| 31 | `code/restaurant/src/main/java/dao/DishDAO4.java:58`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:37` |
+| 32 | `code/restaurant/src/main/java/dao/DishDAO4.java:82`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:39` |
+| 33 | `code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:76` |
+| 34 | `code/restaurant/src/main/java/dao/DishDAO4.java:92`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:77` |
+| 35 | `code/restaurant/src/main/java/dao/DishDAO4.java:115`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:79` |
+| 36 | `code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:91` |
+| 37 | `code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:22` |
+| 38 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:28`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:24` |
 | 39 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:35` |
 | 40 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:37`<br>`code/restaurant/src/main/java/dao/DishCategoryDAO4.java:51` |
 | 41 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:41` |
 | 42 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:55` |
-| 43 | `code/restaurant/src/main/webapp/quanly/addDishView4.jsp:46` |
-| 44 | `code/restaurant/src/main/webapp/quanly/addDishView4.jsp:42`<br>`code/restaurant/src/main/webapp/quanly/addDishView4.jsp:53` |
-| 45 | `code/restaurant/src/main/webapp/quanly/addDishView4.jsp:41`<br>`code/restaurant/src/main/webapp/quanly/addDishView4.jsp:54` |
-| 46 | `code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:18` |
-| 47 | `code/restaurant/src/main/java/dao/DishDAO4.java:25`<br>`code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:20` |
+| 43 | `code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:46` |
+| 44 | `code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:42`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:53` |
+| 45 | `code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:41`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:54` |
+| 46 | `code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:18` |
+| 47 | `code/restaurant/src/main/java/dao/DishDAO4.java:25`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:20` |
 | 48 | `code/restaurant/src/main/java/dao/DishDAO4.java:33` |
 | 49 | `code/restaurant/src/main/java/dao/DishDAO4.java:35` |
 | 50 | `code/restaurant/src/main/java/dao/DishDAO4.java:45` |
 | 51 | `code/restaurant/src/main/java/dao/DishDAO4.java:48` |
-| 52 | `code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:24` |
-| 53 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:28`<br>`code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:26` |
+| 52 | `code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:24` |
+| 53 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:28`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:26` |
 | 54 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:35` |
 | 55 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:37`<br>`code/restaurant/src/main/java/dao/DishCategoryDAO4.java:51` |
 | 56 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:41` |
 | 57 | `code/restaurant/src/main/java/dao/DishCategoryDAO4.java:54` |
-| 58 | `code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp:34` |
-| A1 | `code/restaurant/src/main/webapp/quanly/addDishView4.jsp:50` |
-| A2 | `code/restaurant/src/main/java/dao/DishDAO4.java:64`<br>`code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:41` |
-| E1 | `code/restaurant/src/main/java/dao/DishDAO4.java:72`<br>`code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:41` |
-| E2 | `code/restaurant/src/main/java/dao/DishDAO4.java:118`<br>`code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp:84` |
+| 58 | `code/restaurant/src/main/webapp/view/ManagementStaff/dishManagementView4.jsp:34` |
+| A1 | `code/restaurant/src/main/webapp/view/ManagementStaff/addDishView4.jsp:50` |
+| A2 | `code/restaurant/src/main/java/dao/DishDAO4.java:64`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:41` |
+| E1 | `code/restaurant/src/main/java/dao/DishDAO4.java:72`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:41` |
+| E2 | `code/restaurant/src/main/java/dao/DishDAO4.java:118`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/doSaveDish4.jsp:84` |
 
 **Đối chiếu biểu đồ hoạt động – mã (Hình 7)**
 
@@ -1104,7 +1111,7 @@ Module dùng chung Maven WAR, package model/dao, lớp DAO4, đăng nhập và c
 | --- | --- |
 | Thực thể | `Customer4`, `CustomerStatistic4`, `MembershipCard4`, `Order4`, `Invoice4`, `Payment4`, `OrderSubmission4`, `OrderSubmissionProduct4`, `SalesStaff4`, `Combo4`, `ComboDish4` trong `src/main/java/model` |
 | DAO4 | `CustomerStatisticDAO4`, `OrderDAO4`, `OrderSubmissionProductDAO4` trong `src/main/java/dao` |
-| Trang | `statisticsReportView4.jsp`, `customerStatisticsView4.jsp`, `customerSpendingView4.jsp`, `orderDetailView4.jsp` trong `src/main/webapp/quanly` |
+| Trang | `statisticsReportView4.jsp`, `customerStatisticsView4.jsp`, `customerSpendingView4.jsp`, `orderDetailView4.jsp` trong `src/main/webapp/view/ManagementStaff` |
 | Dùng chung | `DAO4`, `Product4`, `Dish4`, `Staff4`, `ManagementStaff4`, `Account4`, `managerMainView4.jsp`, đăng nhập, `auth.jspf`, `common.jspf` |
 | Hạ tầng trình bày | `WEB-INF/statistics.jspf`: đọc ngày/id, mã hóa tham số URL, hiển thị ngày và tiền, lấy lần thanh toán thành công sớm nhất; không tạo thuộc tính request/session mới |
 | CSDL | `db/schema.sql`, `db/seed.sql`: bổ sung bảng và dữ liệu ở cuối tệp |
@@ -1545,7 +1552,7 @@ Mọi thao tác JDBC ở ba DAO4 nằm trong synchronized(DAO4.class), dùng Pre
 
 ### d Các lớp giao diện JSP
 
-**statisticsReportView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/statisticsReportView4.jsp).
+**statisticsReportView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/view/ManagementStaff/statisticsReportView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -1576,7 +1583,7 @@ Mọi thao tác JDBC ở ba DAO4 nằm trong synchronized(DAO4.class), dùng Pre
 </body></html>
 ```
 
-**customerStatisticsView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp).
+**customerStatisticsView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -1651,7 +1658,7 @@ request.setAttribute("customerStatistics",customerStatistics);
 </body></html>
 ```
 
-**customerSpendingView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp).
+**customerSpendingView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/view/ManagementStaff/customerSpendingView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -1728,7 +1735,7 @@ request.setAttribute("orders",orders);
 </body></html>
 ```
 
-**orderDetailView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp).
+**orderDetailView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -1862,60 +1869,60 @@ Công cụ kiểm tra đủ 48 bước và bảy điểm rẽ, đối chiếu ha
 
 | Bước / nhánh | Vị trí mã (file:dòng) |
 | --- | --- |
-| 1 | `code/restaurant/src/main/webapp/quanly/managerMainView4.jsp:22` |
-| 2 | `code/restaurant/src/main/webapp/quanly/managerMainView4.jsp:23` |
-| 3 | `code/restaurant/src/main/webapp/quanly/statisticsReportView4.jsp:15` |
-| 4 | `code/restaurant/src/main/webapp/quanly/statisticsReportView4.jsp:20` |
-| 5 | `code/restaurant/src/main/webapp/quanly/statisticsReportView4.jsp:21` |
-| 6 | `code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:48` |
-| 7 | `code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:54` |
-| 8 | `code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:49` |
-| 9 | `code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:21` |
-| 10 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:25`<br>`code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:23` |
-| 11 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:29`<br>`code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:25` |
-| 12 | `code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:30` |
-| 13 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:39`<br>`code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:31` |
+| 1 | `code/restaurant/src/main/webapp/view/ManagementStaff/managerMainView4.jsp:22` |
+| 2 | `code/restaurant/src/main/webapp/view/ManagementStaff/managerMainView4.jsp:23` |
+| 3 | `code/restaurant/src/main/webapp/view/ManagementStaff/statisticsReportView4.jsp:15` |
+| 4 | `code/restaurant/src/main/webapp/view/ManagementStaff/statisticsReportView4.jsp:20` |
+| 5 | `code/restaurant/src/main/webapp/view/ManagementStaff/statisticsReportView4.jsp:21` |
+| 6 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:48` |
+| 7 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:54` |
+| 8 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:49` |
+| 9 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:21` |
+| 10 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:25`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:23` |
+| 11 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:29`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:25` |
+| 12 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:30` |
+| 13 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:39`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:31` |
 | 14 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:55` |
 | 15 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:57` |
 | 16 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:65` |
 | 17 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:70` |
-| 18 | `code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:59` |
-| 19 | `code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:63` |
-| 20 | `code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:64` |
-| 21 | `code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp:22` |
-| 22 | `code/restaurant/src/main/java/dao/OrderDAO4.java:27`<br>`code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp:24` |
+| 18 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:59` |
+| 19 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:63` |
+| 20 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:64` |
+| 21 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerSpendingView4.jsp:22` |
+| 22 | `code/restaurant/src/main/java/dao/OrderDAO4.java:27`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/customerSpendingView4.jsp:24` |
 | 23 | `code/restaurant/src/main/java/dao/OrderDAO4.java:44` |
 | 24 | `code/restaurant/src/main/java/dao/OrderDAO4.java:46` |
 | 25 | `code/restaurant/src/main/java/dao/OrderDAO4.java:65` |
-| 26 | `code/restaurant/src/main/java/dao/OrderDAO4.java:70`<br>`code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp:27` |
-| 27 | `code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp:32` |
-| 28 | `code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp:34` |
-| 29 | `code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp:45` |
-| 30 | `code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp:57` |
-| 31 | `code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp:66` |
-| 32 | `code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp:67` |
-| 33 | `code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:23` |
-| 34 | `code/restaurant/src/main/java/dao/OrderDAO4.java:84`<br>`code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:25` |
+| 26 | `code/restaurant/src/main/java/dao/OrderDAO4.java:70`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/customerSpendingView4.jsp:27` |
+| 27 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerSpendingView4.jsp:32` |
+| 28 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerSpendingView4.jsp:34` |
+| 29 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerSpendingView4.jsp:45` |
+| 30 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerSpendingView4.jsp:57` |
+| 31 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerSpendingView4.jsp:66` |
+| 32 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerSpendingView4.jsp:67` |
+| 33 | `code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:23` |
+| 34 | `code/restaurant/src/main/java/dao/OrderDAO4.java:84`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:25` |
 | 35 | `code/restaurant/src/main/java/dao/OrderDAO4.java:102` |
 | 36 | `code/restaurant/src/main/java/dao/OrderDAO4.java:104` |
 | 37 | `code/restaurant/src/main/java/dao/OrderDAO4.java:123` |
-| 38 | `code/restaurant/src/main/java/dao/OrderDAO4.java:128`<br>`code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:28` |
-| 39 | `code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:33` |
-| 40 | `code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:35` |
-| 41 | `code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:45` |
-| 42 | `code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:47` |
-| 43 | `code/restaurant/src/main/java/dao/OrderSubmissionProductDAO4.java:27`<br>`code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:49` |
+| 38 | `code/restaurant/src/main/java/dao/OrderDAO4.java:128`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:28` |
+| 39 | `code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:33` |
+| 40 | `code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:35` |
+| 41 | `code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:45` |
+| 42 | `code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:47` |
+| 43 | `code/restaurant/src/main/java/dao/OrderSubmissionProductDAO4.java:27`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:49` |
 | 44 | `code/restaurant/src/main/java/dao/OrderSubmissionProductDAO4.java:43` |
 | 45 | `code/restaurant/src/main/java/dao/OrderSubmissionProductDAO4.java:45` |
 | 46 | `code/restaurant/src/main/java/dao/OrderSubmissionProductDAO4.java:63` |
-| 47 | `code/restaurant/src/main/java/dao/OrderSubmissionProductDAO4.java:68`<br>`code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:51` |
-| 48 | `code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:68` |
-| A1 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:69`<br>`code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:35` |
-| A2 | `code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:65` |
-| E1 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:27`<br>`code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:27` |
-| E2a | `code/restaurant/src/main/java/dao/OrderDAO4.java:69`<br>`code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp:29` |
-| E2b | `code/restaurant/src/main/java/dao/OrderDAO4.java:127`<br>`code/restaurant/src/main/java/dao/OrderSubmissionProductDAO4.java:67`<br>`code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:30`<br>`code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp:53` |
-| E3 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:73`<br>`code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:33`<br>`code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp:39` |
+| 47 | `code/restaurant/src/main/java/dao/OrderSubmissionProductDAO4.java:68`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:51` |
+| 48 | `code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:68` |
+| A1 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:69`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:35` |
+| A2 | `code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:65` |
+| E1 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:27`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:27` |
+| E2a | `code/restaurant/src/main/java/dao/OrderDAO4.java:69`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/customerSpendingView4.jsp:29` |
+| E2b | `code/restaurant/src/main/java/dao/OrderDAO4.java:127`<br>`code/restaurant/src/main/java/dao/OrderSubmissionProductDAO4.java:67`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:30`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/orderDetailView4.jsp:53` |
+| E3 | `code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java:73`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:33`<br>`code/restaurant/src/main/webapp/view/ManagementStaff/customerStatisticsView4.jsp:39` |
 
 **Đối chiếu biểu đồ hoạt động – mã (Hình 9)**
 
