@@ -4,7 +4,7 @@ set -eu
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 BUILD="$ROOT/build"
 STAGE="$BUILD/src"
-PANDOC=/Users/minh/anaconda3/bin/pandoc
+PANDOC=${PANDOC:-pandoc}
 
 if [ -d "$BUILD" ]; then
   rm -rf "$BUILD"
@@ -12,8 +12,13 @@ fi
 mkdir -p "$STAGE"
 
 for source in question.md spec.md analysis.md desing.md implement.md; do
-  cp "$ROOT/$source" "$STAGE/$source"
+  if [ "$source" = question.md ]; then
+    cp "$ROOT/$source" "$STAGE/$source"
+  else
+    cp "$ROOT/report/$source" "$STAGE/$source"
+  fi
   perl -pi -e 's/\.svg([)#])/.png$1/g; s/\.svg\b/.png/g' "$STAGE/$source"
+  perl -pi -e 's{\]\((<?)\.\./}{]($1}g' "$STAGE/$source"
 done
 
 "$PANDOC" "$STAGE/spec.md" \

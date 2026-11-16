@@ -2,7 +2,7 @@
 
 ## 1 Thiết kế lớp thực thể
 
-Biểu đồ thiết kế lớp thực thể được chuyển đổi từ biểu đồ lớp thực thể toàn hệ thống trong [analysis.md](analysis.md) và [diagrams/class-entity-system.puml](diagrams/class-entity-system.puml). Tập lớp, tên lớp, thuộc tính nghiệp vụ, quan hệ kế thừa, loại quan hệ và phía hình thoi đã chốt ở pha phân tích được giữ nguyên; pha thiết kế chỉ bổ sung định danh kỹ thuật, kiểu dữ liệu, thuộc tính tham chiếu đối tượng và chuyển ký pháp của ba lớp liên kết n–n.
+Biểu đồ thiết kế lớp thực thể được chuyển đổi từ biểu đồ lớp thực thể toàn hệ thống trong [analysis.md](analysis.md) và [diagrams/class-entity-system.puml](../diagrams/class-entity-system.puml). Tập lớp, tên lớp, thuộc tính nghiệp vụ, quan hệ kế thừa, loại quan hệ và phía hình thoi đã chốt ở pha phân tích được giữ nguyên; pha thiết kế chỉ bổ sung định danh kỹ thuật, kiểu dữ liệu, thuộc tính tham chiếu đối tượng và chuyển ký pháp của ba lớp liên kết n–n.
 
 ### Bước 1 Bổ sung thuộc tính id
 
@@ -85,9 +85,9 @@ Mỗi thuộc tính đối tượng dưới đây tương ứng đúng một đ�
 
 `CustomerStatistic4` có `periodStart : Date`, `periodEnd : Date`, `totalSpending : float`; tổng chi tiêu được tính khi lập báo cáo và không lưu CSDL. `ProductStatistic4` và `SupplierStatistic4` giữ `periodStart : Date`, `periodEnd : Date`; `IngredientStatistic4` không có thuộc tính riêng. Không bổ sung thuộc tính dẫn xuất vào các thực thể thường.
 
-![Biểu đồ thiết kế lớp thực thể](diagrams/class-entity-design.svg)
+![Biểu đồ thiết kế lớp thực thể](../diagrams/class-entity-design.svg)
 
-PlantUML source: [diagrams/class-entity-design.puml](diagrams/class-entity-design.puml)
+PlantUML source: [diagrams/class-entity-design.puml](../diagrams/class-entity-design.puml)
 
 Hình 1: Biểu đồ thiết kế lớp thực thể
 
@@ -273,15 +273,15 @@ Không khóa chính nào có `N`.
 - Không có cột trùng lặp. `recordedUnitPrice` trong `tblOrderSubmissionProduct4`, `unitCost` trong `tblGoodsReceiptIngredient4` và `amountDue` trong `tblInvoice4` là đơn giá, số tiền được ghi nhận tại đúng thời điểm phát sinh, không phải bản sao của `tblProduct4.salePrice` hay của tổng tính lại; chúng được giữ làm dữ kiện lịch sử.
 - `tblDish4` không có cột thường nhưng vẫn được giữ vì có khóa ngoại `tblDishCategory4id`; `tblCombo4` được giữ vì có hai cột `startsAt`, `endsAt`. `tblProduct4` được giữ làm bảng gốc cho hai bảng con này.
 
-![Sơ đồ thiết kế CSDL](diagrams/database-design.svg)
+![Sơ đồ thiết kế CSDL](../diagrams/database-design.svg)
 
-PlantUML source: [diagrams/database-design.puml](diagrams/database-design.puml)
+PlantUML source: [diagrams/database-design.puml](../diagrams/database-design.puml)
 
 Hình 2: Sơ đồ thiết kế CSDL
 
 ## 3 Thiết kế giao diện
 
-Phần này thực hiện Bước 1 của thiết kế tĩnh module theo §4.3.1, tr. 96–102 của giáo trình: thiết kế giao diện cho các lớp giao diện (GD) trong biểu đồ lớp phân tích của hai module. Nền tảng là web J2EE nên mỗi lớp GD thành một trang jsp, đặt tên `gd` + tên lớp bỏ tiền tố `GD`; giao diện chính thêm hậu tố actor (`gdChinhQuanLy`). Mỗi thuộc tính của lớp GD thành đúng một thành phần trên khung; bảng đối chiếu thuộc tính – thành phần – đích chuyển trang, cùng bảng thông báo, nằm ở tab "Đối chiếu" của [diagrams/ui-design.xlsx](diagrams/ui-design.xlsx). Chỉ vẽ luồng chuẩn của kịch bản v.2; số bước ghi ở chú thích dưới mỗi khung.
+Phần này thực hiện Bước 1 của thiết kế tĩnh module theo §4.3.1, tr. 96–102 của giáo trình: thiết kế giao diện cho các lớp giao diện (GD) trong biểu đồ lớp phân tích của hai module. Nền tảng là web J2EE nên mỗi lớp GD thành một trang jsp, đặt tên `gd` + tên lớp bỏ tiền tố `GD`; giao diện chính thêm hậu tố actor (`gdChinhQuanLy`). Mỗi thuộc tính của lớp GD thành đúng một thành phần trên khung; bảng đối chiếu thuộc tính – thành phần – đích chuyển trang, cùng bảng thông báo, nằm ở tab "Đối chiếu" của [diagrams/ui-design.xlsx](../diagrams/ui-design.xlsx). Chỉ vẽ luồng chuẩn của kịch bản v.2; số bước ghi ở chú thích dưới mỗi khung.
 
 ### Bổ sung so với pha phân tích
 
@@ -298,7 +298,7 @@ Giáo trình ở Chương 6 coi việc thiếu nút đóng hoặc quay về màn
 
 Các giao diện được thiết kế như Hình 3. Tầng giao diện gồm các trang jsp: gdChinhQuanLy, gdQuanLyMonAn, gdThemMonAn; trang xử lý doLuuMonAn không có giao diện.
 
-![Thiết kế giao diện cho module Thêm món ăn mới](diagrams/ui-add-dish.png)
+![Thiết kế giao diện cho module Thêm món ăn mới](../diagrams/ui-add-dish.png)
 
 Hình 3: Thiết kế giao diện cho module Thêm món ăn mới
 
@@ -308,7 +308,7 @@ Dữ liệu trên hình là dữ liệu minh họa: món nhập D004 – Cơm g�
 
 Các giao diện được thiết kế như Hình 4. Tầng giao diện gồm các trang jsp: gdChinhQuanLy, gdBaoCaoThongKe, gdThongKeKhachHang, gdChiTietChiTieuKhachHang, gdChiTietDonHang; module chỉ đọc dữ liệu nên không có trang xử lý.
 
-![Thiết kế giao diện cho module Xem thống kê khách hàng theo doanh thu](diagrams/ui-customer-statistics.png)
+![Thiết kế giao diện cho module Xem thống kê khách hàng theo doanh thu](../diagrams/ui-customer-statistics.png)
 
 Hình 4: Thiết kế giao diện cho module Xem thống kê khách hàng theo doanh thu
 
@@ -400,11 +400,11 @@ Các giao diện đã được thiết kế ở Hình 3. Biểu đồ lớp thi�
 
 Các cột Mã món, Tên món, Giá bán, Trạng thái kinh doanh lấy từ `dishes` qua thuộc tính kế thừa của `Product4`; Loại món ăn lấy từ `dishCategories` qua phép đối chiếu `DishCategory4.dishes` với `Dish4.id`. Danh sách chọn loại món dùng `dishCategories.categoryCode` và `dishCategories.name`; dữ liệu nhập giữ trong `dish` và các ô biểu mẫu. TT là số thứ tự hiển thị, thông báo lấy từ kết quả kiểm tra/lưu, không thêm thuộc tính thực thể.
 
-![Biểu đồ lớp thiết kế module Thêm món ăn mới](diagrams/class-design-add-dish.svg)
+![Biểu đồ lớp thiết kế module Thêm món ăn mới](../diagrams/class-design-add-dish.svg)
 
 Hình 5: Biểu đồ lớp thiết kế module Thêm món ăn mới
 
-PlantUML source: [diagrams/class-design-add-dish.puml](diagrams/class-design-add-dish.puml)
+PlantUML source: [diagrams/class-design-add-dish.puml](../diagrams/class-design-add-dish.puml)
 
 ### b Module Xem thống kê khách hàng theo doanh thu
 
@@ -448,11 +448,11 @@ Dữ liệu hiển thị tới được từ các đối tượng đã đóng g�
 
 Các ô ngày lấy giá trị từ `inStartDate`, `inEndDate`; loại báo cáo là danh sách cố định đã thiết kế. TT là số thứ tự hiển thị. Thông báo và điều hướng dùng các nhánh kiểm tra, ngoại lệ đã có, không thêm thuộc tính dẫn xuất vào Order4, Invoice4 hoặc OrderSubmissionProduct4.
 
-![Biểu đồ lớp thiết kế module Xem thống kê khách hàng theo doanh thu](diagrams/class-design-customer-statistics.svg)
+![Biểu đồ lớp thiết kế module Xem thống kê khách hàng theo doanh thu](../diagrams/class-design-customer-statistics.svg)
 
 Hình 6: Biểu đồ lớp thiết kế module Xem thống kê khách hàng theo doanh thu
 
-PlantUML source: [diagrams/class-design-customer-statistics.puml](diagrams/class-design-customer-statistics.puml)
+PlantUML source: [diagrams/class-design-customer-statistics.puml](../diagrams/class-design-customer-statistics.puml)
 
 
 
@@ -464,11 +464,11 @@ Thiết kế module gồm hai bước: vẽ biểu đồ hoạt động, rồi v
 
 Biểu đồ hoạt động của module được trình bày trong Hình 7. Mỗi vùng "Process at …jsp" là một trang jsp của Hình 5. Mỗi hoạt động lấy, kiểm tra hoặc lưu dữ liệu tương ứng một phương thức DAO4 của Hình 5 và nối hai chiều tới nút ghi tên lớp DAO4 và phương thức đó. Get manager info là việc trang nhận nhân viên quản lý đã đăng nhập (thuộc tính ẩn managementStaff); Get dish info là việc doSaveDish4.jsp đóng gói món từ biểu mẫu (thuộc tính ẩn dish). Điều kiện chuyển trang là thao tác của nhân viên trên giao diện. Trang xử lý luôn trả kết quả về addDishView4.jsp, nơi có thành phần thông báo: dữ liệu không hợp lệ hoặc lưu lỗi thì hiển thị lại biểu mẫu, lưu xong thì thông báo thành công rồi chuyển tới danh sách món.
 
-![Biểu đồ thiết kế hoạt động module Thêm món ăn mới](diagrams/activity-add-dish.svg)
+![Biểu đồ thiết kế hoạt động module Thêm món ăn mới](../diagrams/activity-add-dish.svg)
 
 Hình 7: Biểu đồ thiết kế hoạt động module Thêm món ăn mới
 
-PlantUML source: [diagrams/activity-add-dish.puml](diagrams/activity-add-dish.puml).
+PlantUML source: [diagrams/activity-add-dish.puml](../diagrams/activity-add-dish.puml).
 
 **Đối chiếu hoạt động – phương thức**
 
@@ -568,11 +568,11 @@ Tương ứng với biểu đồ tuần tự được trình bày trong Hình 8,
 
 Mỗi thông điệp mang số của câu v.3 tương ứng.
 
-![Biểu đồ tuần tự thiết kế module Thêm món ăn mới](diagrams/sequence-add-dish.svg)
+![Biểu đồ tuần tự thiết kế module Thêm món ăn mới](../diagrams/sequence-add-dish.svg)
 
 Hình 8: Biểu đồ tuần tự thiết kế module Thêm món ăn mới
 
-PlantUML source: [diagrams/sequence-add-dish.puml](diagrams/sequence-add-dish.puml).
+PlantUML source: [diagrams/sequence-add-dish.puml](../diagrams/sequence-add-dish.puml).
 
 ## 6 Thiết kế hoạt động và tuần tự module Xem thống kê khách hàng theo doanh thu
 
@@ -582,11 +582,11 @@ Thiết kế module gồm hai bước: vẽ biểu đồ hoạt động, rồi v
 
 Biểu đồ hoạt động của module được trình bày trong Hình 9. Mỗi vùng Process at …jsp là một trang jsp của Hình 6. Mỗi hoạt động kiểm tra hoặc lấy dữ liệu tương ứng một phương thức DAO4 của Hình 6 và nối hai chiều tới nút phương thức đó.
 
-![Biểu đồ thiết kế hoạt động module Xem thống kê khách hàng theo doanh thu](diagrams/activity-customer-statistics.svg)
+![Biểu đồ thiết kế hoạt động module Xem thống kê khách hàng theo doanh thu](../diagrams/activity-customer-statistics.svg)
 
 Hình 9: Biểu đồ thiết kế hoạt động module Xem thống kê khách hàng theo doanh thu
 
-PlantUML source: [diagrams/activity-customer-statistics.puml](diagrams/activity-customer-statistics.puml).
+PlantUML source: [diagrams/activity-customer-statistics.puml](../diagrams/activity-customer-statistics.puml).
 
 **Đối chiếu hoạt động – phương thức**
 
@@ -682,8 +682,8 @@ Các bước quay lại và lặp của v.2 (30–38) không có số riêng: ch
 
 Mỗi thông điệp mang số của câu v.3 tương ứng. Các bước đóng gói thuộc tính con được lược bỏ trên hình.
 
-![Biểu đồ tuần tự thiết kế module Xem thống kê khách hàng theo doanh thu](diagrams/sequence-customer-statistics.svg)
+![Biểu đồ tuần tự thiết kế module Xem thống kê khách hàng theo doanh thu](../diagrams/sequence-customer-statistics.svg)
 
 Hình 10: Biểu đồ tuần tự thiết kế module Xem thống kê khách hàng theo doanh thu
 
-PlantUML source: [diagrams/sequence-customer-statistics.puml](diagrams/sequence-customer-statistics.puml).
+PlantUML source: [diagrams/sequence-customer-statistics.puml](../diagrams/sequence-customer-statistics.puml).

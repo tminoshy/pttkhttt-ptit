@@ -124,8 +124,8 @@ TABLE_GROUPS = (
 )
 
 MARKDOWN_FILES = (
-    "spec.md", "analysis.md", "desing.md", "implement.md", "README.md",
-    "plan-bao-cao-full.md",
+    "report/spec.md", "report/analysis.md", "report/desing.md",
+    "report/implement.md", "README.md", "rules/plan-bao-cao-full.md",
 )
 
 

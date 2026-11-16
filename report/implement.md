@@ -1,6 +1,6 @@
 # Cài đặt hệ thống quản lý nhà hàng
 
-Tài liệu này trình bày mã Java/JSP cho các lớp của biểu đồ lớp thiết kế (câu 4b): cấu trúc chương trình, mẫu lớp, thuộc tính và phương thức, cách thực hiện từng phương thức, kiểm thử và bảng truy vết từ thiết kế tới mã. Các hình được dẫn chiếu (Hình 5, Hình 6 cho biểu đồ lớp thiết kế; Hình 7–10 cho biểu đồ hoạt động và tuần tự) nằm trong [desing.md](desing.md). Mã nguồn đầy đủ ở [code/restaurant](code/restaurant).
+Tài liệu này trình bày mã Java/JSP cho các lớp của biểu đồ lớp thiết kế (câu 4b): cấu trúc chương trình, mẫu lớp, thuộc tính và phương thức, cách thực hiện từng phương thức, kiểm thử và bảng truy vết từ thiết kế tới mã. Các hình được dẫn chiếu (Hình 5, Hình 6 cho biểu đồ lớp thiết kế; Hình 7–10 cho biểu đồ hoạt động và tuần tự) nằm trong [desing.md](desing.md). Mã nguồn đầy đủ ở [code/restaurant](../code/restaurant).
 
 
 **Quy ước cài đặt chung cho hai module.**
@@ -42,7 +42,7 @@ Phần module 1 trong `schema.sql` tạo bốn bảng, dùng InnoDB, unique củ
 
 Các mẫu dưới đây khai báo đầy đủ trường private đúng thứ tự Hình 5. Hàm tạo rỗng tạo đối tượng để DAO4 hoặc JSP điền; getter trả giá trị của đúng trường, setter gán tham số vào đúng trường. Các hàm này không truy vấn CSDL, không kiểm tra hoặc lưu nghiệp vụ. Product4 và Staff4 là lớp trừu tượng; Dish4 và ManagementStaff4 kế thừa toàn bộ thuộc tính từ lớp cha.
 
-**Lớp Product4** — [mã nguồn](code/restaurant/src/main/java/model/Product4.java).
+**Lớp Product4** — [mã nguồn](../code/restaurant/src/main/java/model/Product4.java).
 
 ```java
 /* ===================================================================
@@ -134,7 +134,7 @@ public abstract class Product4 {
 
 `Product4()` khởi tạo đối tượng rỗng; các getter/setter thao tác trực tiếp những trường khai báo phía trên.
 
-**Lớp Dish4** — [mã nguồn](code/restaurant/src/main/java/model/Dish4.java).
+**Lớp Dish4** — [mã nguồn](../code/restaurant/src/main/java/model/Dish4.java).
 
 ```java
 /* ===================================================================
@@ -161,7 +161,7 @@ public class Dish4 extends Product4 {
 
 `Dish4()` khởi tạo đối tượng rỗng; các phương thức truy cập dữ liệu được kế thừa từ lớp cha.
 
-**Lớp DishCategory4** — [mã nguồn](code/restaurant/src/main/java/model/DishCategory4.java).
+**Lớp DishCategory4** — [mã nguồn](../code/restaurant/src/main/java/model/DishCategory4.java).
 
 ```java
 /* ===================================================================
@@ -220,7 +220,7 @@ public class DishCategory4 {
 
 `DishCategory4()` khởi tạo đối tượng rỗng; các getter/setter thao tác trực tiếp những trường khai báo phía trên.
 
-**Lớp Staff4** — [mã nguồn](code/restaurant/src/main/java/model/Staff4.java).
+**Lớp Staff4** — [mã nguồn](../code/restaurant/src/main/java/model/Staff4.java).
 
 ```java
 /* ===================================================================
@@ -288,7 +288,7 @@ public abstract class Staff4 {
 
 `Staff4()` khởi tạo đối tượng rỗng; các getter/setter thao tác trực tiếp những trường khai báo phía trên.
 
-**Lớp ManagementStaff4** — [mã nguồn](code/restaurant/src/main/java/model/ManagementStaff4.java).
+**Lớp ManagementStaff4** — [mã nguồn](../code/restaurant/src/main/java/model/ManagementStaff4.java).
 
 ```java
 /* ===================================================================
@@ -315,7 +315,7 @@ public class ManagementStaff4 extends Staff4 {
 
 `ManagementStaff4()` khởi tạo đối tượng rỗng; các phương thức truy cập dữ liệu được kế thừa từ lớp cha.
 
-**Lớp Account4** — [mã nguồn](code/restaurant/src/main/java/model/Account4.java).
+**Lớp Account4** — [mã nguồn](../code/restaurant/src/main/java/model/Account4.java).
 
 ```java
 /* ===================================================================
@@ -371,7 +371,7 @@ public class Account4 {
 
 ### c Mẫu lớp DAO4 và cách thực hiện từng phương thức
 
-**Lớp DAO4** — [mã nguồn](code/restaurant/src/main/java/dao/DAO4.java).
+**Lớp DAO4** — [mã nguồn](../code/restaurant/src/main/java/dao/DAO4.java).
 
 ```java
 /* ===================================================================
@@ -428,7 +428,7 @@ public abstract class DAO4 {
 
 `DAO4()` tải cấu hình, nạp JDBC driver và mở kết nối chỉ khi chưa có hoặc kết nối đã đóng. `protected static Connection con` dùng chung cho DAO4 con; khóa DAO4.class bao quanh cả mở kết nối và từng thao tác dữ liệu. Vì dùng một kết nối, yêu cầu JDBC thực hiện tuần tự, phù hợp phạm vi bài tập. Không mở thêm kết nối theo từng lần tải trang. Lỗi cấu hình/kết nối báo IllegalStateException. Hàm tạo không thuộc bước nghiệp vụ v.2/v.3.
 
-**Lớp DishDAO4** — [mã nguồn](code/restaurant/src/main/java/dao/DishDAO4.java).
+**Lớp DishDAO4** — [mã nguồn](../code/restaurant/src/main/java/dao/DishDAO4.java).
 
 ```java
 /* ===================================================================
@@ -566,7 +566,7 @@ public class DishDAO4 extends DAO4 {
 
 `saveDish(dish, idDishCategory)` tắt autoCommit, ghi tblProduct4 với createdAt hiện tại/updatedAt NULL, lấy khóa sinh tự động rồi ghi tblDish4. Commit xong mới điền id/createdAt vào Dish4 và trả chính đối tượng đó. Lỗi khóa ngoại, mã trùng do hai lần gửi xen nhau hoặc lỗi ghi khác đều rollback và trả null; finally bật lại autoCommit. Đây là v.2 bước 20–21, v.3 bước 34–35 và E2. Khóa chung giữ trọn hai INSERT trong cùng giao dịch, không xen câu SQL từ request khác.
 
-**Lớp DishCategoryDAO4** — [mã nguồn](code/restaurant/src/main/java/dao/DishCategoryDAO4.java).
+**Lớp DishCategoryDAO4** — [mã nguồn](../code/restaurant/src/main/java/dao/DishCategoryDAO4.java).
 
 ```java
 /* ===================================================================
@@ -633,7 +633,7 @@ public class DishCategoryDAO4 extends DAO4 {
 
 `DishCategoryDAO4()` gọi DAO4() để dùng kết nối chung. `getDishCategories()` đọc loại theo categoryCode, đóng gói DishCategory4; truy vấn thứ hai đọc tblDish4 để gom Dish4 chỉ mang id, rồi gán vào từng category.dishes. Mảng trả về là DishCategory4[]; loại không có món nhận dishes rỗng. Đây là v.2 bước 10–11, v.3 bước 10–14,19–23,38–42,53–57. Không có loại thì trả mảng rỗng, trang thêm món xử lý A1; lỗi SQL được báo riêng.
 
-**Lớp StaffDAO4** — [mã nguồn](code/restaurant/src/main/java/dao/StaffDAO4.java).
+**Lớp StaffDAO4** — [mã nguồn](../code/restaurant/src/main/java/dao/StaffDAO4.java).
 
 ```java
 /* ===================================================================
@@ -687,7 +687,7 @@ public class StaffDAO4 extends DAO4 {
 
 Các tệp JSP là lớp giao diện trong Hình 5; Tomcat sinh lớp servlet tương ứng khi chạy. Chúng không khai báo phương thức nghiệp vụ riêng. Mẫu bên dưới là mã JSP thực thi; tên và kiểu thuộc tính hiện được ghi cạnh HTML, còn thuộc tính ẩn được đặt trong request/session đúng tên thiết kế. Thông tin người dùng từ session được kiểm tra trước khi truy vấn hoặc lưu.
 
-**managerMainView4.jsp** — [mã nguồn](code/restaurant/src/main/webapp/quanly/managerMainView4.jsp).
+**managerMainView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/managerMainView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -720,7 +720,7 @@ Các tệp JSP là lớp giao diện trong Hình 5; Tomcat sinh lớp servlet t�
 
 Đọc managementStaff từ session, thiếu thì chuyển đăng nhập với err=timeout. Link subManageDish mở danh sách (v.2 1–2, v.3 1–2). subStatisticsReport mở trang statisticsReportView4.jsp dùng chung với module thống kê.
 
-**dishManagementView4.jsp** — [mã nguồn](code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp).
+**dishManagementView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/dishManagementView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -778,7 +778,7 @@ request.setAttribute("dishCategories", dishCategories);
 
 Gọi getDishes và getDishCategories, đặt hai mảng vào request rồi hiển thị bảng. Cột loại món đối chiếu từng DishCategory4.dishes[].id với Dish4.id. Các nút mở biểu mẫu thêm hoặc quay về trang chính (v.2 3–8,24–27; v.3 3–17,46–58). Danh sách được truy vấn lại sau khi lưu.
 
-**addDishView4.jsp** — [mã nguồn](code/restaurant/src/main/webapp/quanly/addDishView4.jsp).
+**addDishView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/addDishView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -869,7 +869,7 @@ String enteredPrice = p(request, "inSalePrice");
 
 Đọc danh sách loại và hiển thị form multipart. A1: danh sách loại rỗng thì thông báo và vô hiệu hóa Lưu. Khi doSaveDish4.jsp trả về, trang chỉ nhận các tên có trên biểu đồ: điền lại các ô từ thuộc tính ẩn dish, chọn lại loại và giá từ chính tham số inoutDishCategory, inSalePrice của biểu mẫu, và hiển thị nội dung outMessage. Khi dish.id > 0 (saveDish đã gán id), trang hiển thị thông báo thành công, khóa biểu mẫu và chuyển về danh sách sau hai giây hoặc khi click OK (v.2 9–15,22–23; v.3 18–26,37–45). Nút quay lại không gửi dữ liệu tới trang lưu.
 
-**doSaveDish4.jsp** — [mã nguồn](code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp).
+**doSaveDish4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/doSaveDish4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -993,7 +993,7 @@ JUnit 5 thực hiện kiểm thử tích hợp với MySQL `restaurant_test`. Tr
 | T19 | Mật khẩu sai | false |
 | T20 | Tài khoản không hoạt động hoặc vai trò SalesStaff4 | false trong cả hai lần kiểm tra |
 
-Mã kiểm thử: [DishDAOTest4](code/restaurant/src/test/java/dao/DishDAOTest4.java), [DishCategoryDAOTest4](code/restaurant/src/test/java/dao/DishCategoryDAOTest4.java), [StaffDAOTest4](code/restaurant/src/test/java/dao/StaffDAOTest4.java). Chạy bằng `mvn test` trong code/restaurant sau khi tạo database kiểm thử. Có thể ghi đè test.db.url, test.db.user, test.db.password bằng thuộc tính JVM Maven.
+Mã kiểm thử: [DishDAOTest4](../code/restaurant/src/test/java/dao/DishDAOTest4.java), [DishCategoryDAOTest4](../code/restaurant/src/test/java/dao/DishCategoryDAOTest4.java), [StaffDAOTest4](../code/restaurant/src/test/java/dao/StaffDAOTest4.java). Chạy bằng `mvn test` trong code/restaurant sau khi tạo database kiểm thử. Có thể ghi đè test.db.url, test.db.user, test.db.password bằng thuộc tính JVM Maven.
 
 Kiểm thử giao diện gồm luồng D004 Cơm gà; lỗi trùng mã, tên rỗng, giá 0 và giữ dữ liệu; loại bị xóa sau khi mở form (A2); mở form khi không có loại (A1); gây lỗi INSERT tblDish4 để kiểm tra E2 không để lại tblProduct4; hai nút quay lại và chuyển đăng nhập khi mất session. CSDL minh họa được phục hồi sau ca xóa loại và gỡ điều kiện gây lỗi sau ca E2.
 
@@ -1122,19 +1122,19 @@ Mọi POJO có constructor rỗng, getter/setter, trường private đúng thứ
 
 | Lớp | Thuộc tính khai báo riêng |
 | --- | --- |
-| [Customer4](code/restaurant/src/main/java/model/Customer4.java) | `id : int`, `customerCode : String`, `fullName : String`, `phoneNumber : String`, `profileStatus : String`, `membershipCards : MembershipCard4[]` |
-| [CustomerStatistic4](code/restaurant/src/main/java/model/CustomerStatistic4.java) | `periodStart : Date`, `periodEnd : Date`, `totalSpending : float` |
-| [MembershipCard4](code/restaurant/src/main/java/model/MembershipCard4.java) | `id : int`, `cardCode : String`, `issuedAt : Date`, `status : String` |
-| [Order4](code/restaurant/src/main/java/model/Order4.java) | `id : int`, `orderCode : String`, `createdAt : Date`, `status : String`, `orderSubmissions : OrderSubmission4[]`, `customer : Customer4`, `invoice : Invoice4` |
-| [Invoice4](code/restaurant/src/main/java/model/Invoice4.java) | `id : int`, `invoiceCode : String`, `issuedAt : Date`, `amountDue : float`, `paymentStatus : String`, `salesStaff : SalesStaff4`, `payments : Payment4[]` |
-| [Payment4](code/restaurant/src/main/java/model/Payment4.java) | `id : int`, `amount : float`, `method : String`, `paidAt : Date`, `result : String`, `salesStaff : SalesStaff4` |
-| [OrderSubmission4](code/restaurant/src/main/java/model/OrderSubmission4.java) | `id : int`, `submittedAt : Date`, `orderSubmissionProducts : OrderSubmissionProduct4[]` |
-| [OrderSubmissionProduct4](code/restaurant/src/main/java/model/OrderSubmissionProduct4.java) | `id : int`, `quantity : int`, `recordedUnitPrice : float`, `note : String`, `processingStatus : String`, `processedAt : Date`, `rejectionReason : String`, `product : Product4`, `salesStaff : SalesStaff4` |
-| [SalesStaff4](code/restaurant/src/main/java/model/SalesStaff4.java) | Không có thuộc tính riêng, kế thừa lớp cha |
-| [Combo4](code/restaurant/src/main/java/model/Combo4.java) | `startsAt : Date`, `endsAt : Date`, `comboDishes : ComboDish4[]` |
-| [ComboDish4](code/restaurant/src/main/java/model/ComboDish4.java) | `id : int`, `quantity : int`, `dish : Dish4` |
+| [Customer4](../code/restaurant/src/main/java/model/Customer4.java) | `id : int`, `customerCode : String`, `fullName : String`, `phoneNumber : String`, `profileStatus : String`, `membershipCards : MembershipCard4[]` |
+| [CustomerStatistic4](../code/restaurant/src/main/java/model/CustomerStatistic4.java) | `periodStart : Date`, `periodEnd : Date`, `totalSpending : float` |
+| [MembershipCard4](../code/restaurant/src/main/java/model/MembershipCard4.java) | `id : int`, `cardCode : String`, `issuedAt : Date`, `status : String` |
+| [Order4](../code/restaurant/src/main/java/model/Order4.java) | `id : int`, `orderCode : String`, `createdAt : Date`, `status : String`, `orderSubmissions : OrderSubmission4[]`, `customer : Customer4`, `invoice : Invoice4` |
+| [Invoice4](../code/restaurant/src/main/java/model/Invoice4.java) | `id : int`, `invoiceCode : String`, `issuedAt : Date`, `amountDue : float`, `paymentStatus : String`, `salesStaff : SalesStaff4`, `payments : Payment4[]` |
+| [Payment4](../code/restaurant/src/main/java/model/Payment4.java) | `id : int`, `amount : float`, `method : String`, `paidAt : Date`, `result : String`, `salesStaff : SalesStaff4` |
+| [OrderSubmission4](../code/restaurant/src/main/java/model/OrderSubmission4.java) | `id : int`, `submittedAt : Date`, `orderSubmissionProducts : OrderSubmissionProduct4[]` |
+| [OrderSubmissionProduct4](../code/restaurant/src/main/java/model/OrderSubmissionProduct4.java) | `id : int`, `quantity : int`, `recordedUnitPrice : float`, `note : String`, `processingStatus : String`, `processedAt : Date`, `rejectionReason : String`, `product : Product4`, `salesStaff : SalesStaff4` |
+| [SalesStaff4](../code/restaurant/src/main/java/model/SalesStaff4.java) | Không có thuộc tính riêng, kế thừa lớp cha |
+| [Combo4](../code/restaurant/src/main/java/model/Combo4.java) | `startsAt : Date`, `endsAt : Date`, `comboDishes : ComboDish4[]` |
+| [ComboDish4](../code/restaurant/src/main/java/model/ComboDish4.java) | `id : int`, `quantity : int`, `dish : Dish4` |
 
-**CustomerStatistic4.java** — [mã nguồn](code/restaurant/src/main/java/model/CustomerStatistic4.java).
+**CustomerStatistic4.java** — [mã nguồn](../code/restaurant/src/main/java/model/CustomerStatistic4.java).
 
 ```java
 /* ===================================================================
@@ -1171,7 +1171,7 @@ public class CustomerStatistic4 extends Customer4 {
 }
 ```
 
-**Combo4.java** — [mã nguồn](code/restaurant/src/main/java/model/Combo4.java).
+**Combo4.java** — [mã nguồn](../code/restaurant/src/main/java/model/Combo4.java).
 
 ```java
 /* ===================================================================
@@ -1212,7 +1212,7 @@ CustomerStatistic4.periodStart/periodEnd/totalSpending là thuộc tính tạm c
 
 ### c Mẫu lớp DAO4 và cách thực hiện từng phương thức
 
-**CustomerStatisticDAO4.java** — [mã nguồn](code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java).
+**CustomerStatisticDAO4.java** — [mã nguồn](../code/restaurant/src/main/java/dao/CustomerStatisticDAO4.java).
 
 ```java
 /* ===================================================================
@@ -1295,7 +1295,7 @@ public class CustomerStatisticDAO4 extends DAO4 {
 }
 ```
 
-**OrderDAO4.java** — [mã nguồn](code/restaurant/src/main/java/dao/OrderDAO4.java).
+**OrderDAO4.java** — [mã nguồn](../code/restaurant/src/main/java/dao/OrderDAO4.java).
 
 ```java
 /* ===================================================================
@@ -1455,7 +1455,7 @@ public class OrderDAO4 extends DAO4 {
 }
 ```
 
-**OrderSubmissionProductDAO4.java** — [mã nguồn](code/restaurant/src/main/java/dao/OrderSubmissionProductDAO4.java).
+**OrderSubmissionProductDAO4.java** — [mã nguồn](../code/restaurant/src/main/java/dao/OrderSubmissionProductDAO4.java).
 
 ```java
 /* ===================================================================
@@ -1545,7 +1545,7 @@ Mọi thao tác JDBC ở ba DAO4 nằm trong synchronized(DAO4.class), dùng Pre
 
 ### d Các lớp giao diện JSP
 
-**statisticsReportView4.jsp** — [mã nguồn](code/restaurant/src/main/webapp/quanly/statisticsReportView4.jsp).
+**statisticsReportView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/statisticsReportView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -1576,7 +1576,7 @@ Mọi thao tác JDBC ở ba DAO4 nằm trong synchronized(DAO4.class), dùng Pre
 </body></html>
 ```
 
-**customerStatisticsView4.jsp** — [mã nguồn](code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp).
+**customerStatisticsView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/customerStatisticsView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -1651,7 +1651,7 @@ request.setAttribute("customerStatistics",customerStatistics);
 </body></html>
 ```
 
-**customerSpendingView4.jsp** — [mã nguồn](code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp).
+**customerSpendingView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/customerSpendingView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -1728,7 +1728,7 @@ request.setAttribute("orders",orders);
 </body></html>
 ```
 
-**orderDetailView4.jsp** — [mã nguồn](code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp).
+**orderDetailView4.jsp** — [mã nguồn](../code/restaurant/src/main/webapp/quanly/orderDetailView4.jsp).
 
 ```jsp
 <%-- ===================================================================
@@ -1824,7 +1824,7 @@ orderDetailView4.jsp nhận thêm idOrder, lấy Order4 đúng ngữ cảnh rồ
 
 ### e Kiểm thử module
 
-[StatisticsDAOTest4](code/restaurant/src/test/java/dao/StatisticsDAOTest4.java) chạy trên MySQL restaurant_test và nạp lại dữ liệu trước mỗi ca. URL ngoài database kiểm thử bị chặn trước DDL; truy vấn SELECT DATABASE() xác nhận lại database được chọn.
+[StatisticsDAOTest4](../code/restaurant/src/test/java/dao/StatisticsDAOTest4.java) chạy trên MySQL restaurant_test và nạp lại dữ liệu trước mỗi ca. URL ngoài database kiểm thử bị chặn trước DDL; truy vấn SELECT DATABASE() xác nhận lại database được chọn.
 
 | Ca kiểm thử | Kết quả mong đợi |
 | --- | --- |

@@ -466,21 +466,21 @@ Biểu đồ tổng quan xác định các tác nhân trực tiếp và các ch�
 
 Trong hai biểu đồ chi tiết, mỗi use case con nghiệp vụ tương ứng với một giao diện mà nhân viên tương tác. Nhân viên quản lý kế thừa tác nhân Nhân viên; use case Management staff login 4 kế thừa Login 4 và được use case chính «include». Mỗi màn hình được mở tùy chọn từ màn hình trước có quan hệ «extend» về màn hình đó. Login 4 là tiền điều kiện dùng chung, không thuộc giao diện nghiệp vụ của module. Nhập dữ liệu, chọn điều kiện, kiểm tra và lưu là các bước trong kịch bản, không tách thành use case riêng.
 
-![Biểu đồ use case tổng quan hệ thống quản lý nhà hàng](diagrams/use-case-system-overview.svg)
+![Biểu đồ use case tổng quan hệ thống quản lý nhà hàng](../diagrams/use-case-system-overview.svg)
 
-PlantUML source: [diagrams/use-case-system-overview.puml](diagrams/use-case-system-overview.puml)
+PlantUML source: [diagrams/use-case-system-overview.puml](../diagrams/use-case-system-overview.puml)
 
 Hình 3.1. Biểu đồ use case tổng quan hệ thống quản lý nhà hàng
 
-![Biểu đồ use case chi tiết module Thêm món ăn mới](diagrams/use-case-add-dish.svg)
+![Biểu đồ use case chi tiết module Thêm món ăn mới](../diagrams/use-case-add-dish.svg)
 
-PlantUML source: [diagrams/use-case-add-dish.puml](diagrams/use-case-add-dish.puml)
+PlantUML source: [diagrams/use-case-add-dish.puml](../diagrams/use-case-add-dish.puml)
 
 Hình 3.2. Biểu đồ use case chi tiết module Thêm món ăn mới
 
-![Biểu đồ use case chi tiết module Xem thống kê khách hàng](diagrams/use-case-customer-statistics.svg)
+![Biểu đồ use case chi tiết module Xem thống kê khách hàng](../diagrams/use-case-customer-statistics.svg)
 
-PlantUML source: [diagrams/use-case-customer-statistics.puml](diagrams/use-case-customer-statistics.puml)
+PlantUML source: [diagrams/use-case-customer-statistics.puml](../diagrams/use-case-customer-statistics.puml)
 
 Hình 3.3. Biểu đồ use case chi tiết module Xem thống kê khách hàng
 

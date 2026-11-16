@@ -185,10 +185,10 @@ GoodsReceipt4 -- Ingredient4
 (GoodsReceipt4, Ingredient4) .. GoodsReceiptIngredient4
 OrderSubmission4 -- Product4
 (OrderSubmission4, Product4) .. OrderSubmissionProduct4
-Reservation4 o-- SalesStaff4 : handled by
-OrderSubmissionProduct4 o-- SalesStaff4 : handled by
-Invoice4 o-- SalesStaff4 : issued by
-Payment4 o-- SalesStaff4 : received by
+Reservation4 o-- SalesStaff4 
+OrderSubmissionProduct4 o-- SalesStaff4
+Invoice4 o-- SalesStaff4
+Payment4 o-- SalesStaff4
 GoodsReceipt4 o-- WarehouseStaff4
 @enduml
 
